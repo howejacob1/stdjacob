@@ -173,10 +173,12 @@ uint max_misalignment(uint num_bytes_to_align_to) {
   return num_bytes_to_align_to - 1;
 }
 
-static int gen_tmp_filename_windows(char* buffer, size_t buffer_size) {
-  assert(IS_WINDOWS());
+int gen_tmp_filename(char* buffer, size_t buffer_size) {
+  assert(buffer != NULL);
+  assert(buffer_size >= TMP_FILENAME_MAX);
   
 #if IS_WINDOWS()
+  // Windows implementation using GetTempFileName
   char temp_path[MAX_PATH];
   DWORD result = GetTempPath(MAX_PATH, temp_path);
   if (result == 0 || result > MAX_PATH) {
@@ -188,31 +190,18 @@ static int gen_tmp_filename_windows(char* buffer, size_t buffer_size) {
   }
   return 0;
 #else
-  (void)buffer;
-  (void)buffer_size;
-  return -1;  // Should never reach here due to assert
-#endif
-}
-
-int gen_tmp_filename(char* buffer, size_t buffer_size) {
-  assert(buffer != NULL);
-  assert(buffer_size >= TMP_FILENAME_MAX);
+  // Unix/Linux/macOS implementation using mkstemp
+  int fd;
   
-  if (IS_WINDOWS()) {
-    return gen_tmp_filename_windows(buffer, buffer_size);
-  } else {
-    // Unix/Linux/macOS implementation using mkstemp
-    int fd;
-    
-    // P_tmpdir is always defined on POSIX systems
-    snprintf(buffer, buffer_size, P_tmpdir "/XXXXXX");
-    
-    fd = mkstemp(buffer);
-    if (fd == -1) {
-      return -1;
-    }
-    
-    close(fd);
-    return 0;
+  // P_tmpdir is always defined on POSIX systems
+  snprintf(buffer, buffer_size, P_tmpdir "/XXXXXX");
+  
+  fd = mkstemp(buffer);
+  if (fd == -1) {
+    return -1;
   }
+  
+  close(fd);
+  return 0;
+#endif
 }
