@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef STDJACOB_H
+#define STDJACOB_H
 
 #include <stdbool.h>
 #include <locale.h>
