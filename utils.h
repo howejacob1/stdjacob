@@ -151,4 +151,8 @@ uint max_misalignment(uint num_bytes_to_align_to);
 
 #define BOOL_TO_STR(thing) ((thing) ? "true" : "false")
 
+// Temporary filename generation
+#define TMP_FILENAME_MAX 256
+int gen_tmp_filename(char* buffer, size_t buffer_size);
+
 #endif

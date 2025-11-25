@@ -167,4 +167,43 @@ bool is_power_of_two(uintptr_t thing) {
 uint max_misalignment(uint num_bytes_to_align_to) {
   assert(is_power_of_two(num_bytes_to_align_to));
   return num_bytes_to_align_to - 1;
-}  
+}
+
+int gen_tmp_filename(char* buffer, size_t buffer_size) {
+  if (buffer == NULL || buffer_size < TMP_FILENAME_MAX) {
+    return -1;
+  }
+
+#if defined(_WIN32) || defined(_WIN64)
+  // Windows implementation
+  char temp_path[MAX_PATH];
+  DWORD result = GetTempPath(MAX_PATH, temp_path);
+  if (result == 0 || result > MAX_PATH) {
+    return -1;
+  }
+  
+  if (GetTempFileName(temp_path, "tmp", 0, buffer) == 0) {
+    return -1;
+  }
+  return 0;
+  
+#else
+  // Unix/Linux/macOS implementation using mkstemp
+  int fd;
+  
+  // Use P_tmpdir if available, otherwise fallback to /tmp
+#ifdef P_tmpdir
+  snprintf(buffer, buffer_size, "%s/tmp_XXXXXX", P_tmpdir);
+#else
+  snprintf(buffer, buffer_size, "/tmp/tmp_XXXXXX");
+#endif
+  
+  fd = mkstemp(buffer);
+  if (fd == -1) {
+    return -1;
+  }
+  
+  close(fd);
+  return 0;
+#endif
+}
