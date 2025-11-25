@@ -14,6 +14,13 @@
 #include <stdint.h>
 #include <assert.h>
 
+// Platform detection macro
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WINDOWS__)
+  #define IS_WINDOWS() 1
+#else
+  #define IS_WINDOWS() 0
+#endif
+
 // Macro to determine what power of two a value is
   #define WHAT_POWER_OF_TWO(x)                                              \
   ((x) == 1ull ? 0 :                                                        \
