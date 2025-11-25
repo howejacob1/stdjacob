@@ -14,7 +14,10 @@
 #include <stdint.h>
 #include <assert.h>
 
-// Platform detection macro
+// P_tmpdir is defined in stdio.h on POSIX systems
+// On Windows, we use GetTempPath instead
+
+// Platform detection - evaluates to 1 on Windows, 0 otherwise
 #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WINDOWS__)
   #define IS_WINDOWS() 1
 #else

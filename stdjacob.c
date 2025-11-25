@@ -1,5 +1,9 @@
 #include "stdjacob.h"
 
+#if IS_WINDOWS()
+  #include <windows.h>
+#endif
+
 void enable_emojis() {
   setlocale(LC_ALL, "en_US.utf8");
 }
@@ -170,6 +174,8 @@ uint max_misalignment(uint num_bytes_to_align_to) {
 }
 
 static int gen_tmp_filename_windows(char* buffer, size_t buffer_size) {
+  assert(IS_WINDOWS());
+  
 #if IS_WINDOWS()
   char temp_path[MAX_PATH];
   DWORD result = GetTempPath(MAX_PATH, temp_path);
@@ -184,7 +190,7 @@ static int gen_tmp_filename_windows(char* buffer, size_t buffer_size) {
 #else
   (void)buffer;
   (void)buffer_size;
-  return -1;  // Should never be called on non-Windows
+  return -1;  // Should never reach here due to assert
 #endif
 }
 
