@@ -17,11 +17,11 @@
 // P_tmpdir is defined in stdio.h on POSIX systems
 // On Windows, we use GetTempPath instead
 
-// Platform detection - evaluates to 1 on Windows, 0 otherwise
+// Platform detection - evaluates to true on Windows, false otherwise
 #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WINDOWS__)
-  #define IS_WINDOWS() 1
+  #define IS_WINDOWS() true
 #else
-  #define IS_WINDOWS() 0
+  #define IS_WINDOWS() false
 #endif
 
 // Macro to determine what power of two a value is
