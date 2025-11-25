@@ -126,7 +126,13 @@ void* malloc_or_die(size_t num_chars) {
 }
 
 int sys_page_size() {
+#if IS_WINDOWS()
+  SYSTEM_INFO si;
+  GetSystemInfo(&si);
+  return si.dwPageSize;
+#else
   return sysconf(_SC_PAGE_SIZE);
+#endif
 }
 
 bool is_page_size_correct(int page_size) {
