@@ -1,7 +1,12 @@
+#define _XOPEN_SOURCE 500
 #include "stdjacob.h"
 
 #if IS_WINDOWS()
   #include <windows.h>
+#else
+  #ifndef P_tmpdir
+    #define P_tmpdir "/tmp"
+  #endif
 #endif
 
 void enable_emojis() {
