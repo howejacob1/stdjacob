@@ -250,3 +250,39 @@ FILE* open_compressed(const char* path) {
 void close_compressed(FILE* f) {
   pclose(f);
 }
+
+/* === Bit counting fallbacks (when no builtins available) === */
+
+#if !(__STDC_VERSION__ >= 202311L) && !defined(__GNUC__) && !defined(__clang__)
+
+int bit_popcount(unsigned x) {
+  int count = 0;
+  while (x) {
+    count += x & 1;
+    x >>= 1;
+  }
+  return count;
+}
+
+int bit_clz(unsigned x) {
+  if (x == 0) return sizeof(unsigned) * 8;
+  int count = 0;
+  unsigned mask = 1u << (sizeof(unsigned) * 8 - 1);
+  while (!(x & mask)) {
+    count++;
+    mask >>= 1;
+  }
+  return count;
+}
+
+int bit_ctz(unsigned x) {
+  if (x == 0) return sizeof(unsigned) * 8;
+  int count = 0;
+  while (!(x & 1)) {
+    count++;
+    x >>= 1;
+  }
+  return count;
+}
+
+#endif

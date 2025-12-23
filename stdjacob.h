@@ -183,14 +183,14 @@ uint max_misalignment(uint num_bytes_to_align_to);
   #define BIT_POPCOUNT(x)      __builtin_popcount(x)
   #define BIT_CLZ(x)           __builtin_clz(x)
   #define BIT_CTZ(x)           __builtin_ctz(x)
-#elif defined(_MSC_VER)
-  #include <intrin.h>
-  #define BIT_POPCOUNT(x)      __popcnt(x)
-  // MSVC CLZ/CTZ require inline functions, skip for now
 #else
-  // Fallback: naive implementations
-  #define BIT_POPCOUNT(x)      _stdjacob_popcount(x)
-  int _stdjacob_popcount(unsigned x) { int c=0; while(x) { c += x&1; x >>= 1; } return c; }
+  // Fallback: portable implementations (also covers MSVC)
+  int bit_popcount(unsigned x);
+  int bit_clz(unsigned x);
+  int bit_ctz(unsigned x);
+  #define BIT_POPCOUNT(x)      bit_popcount(x)
+  #define BIT_CLZ(x)           bit_clz(x)
+  #define BIT_CTZ(x)           bit_ctz(x)
 #endif
 
 #define BOOL_TO_STR(thing) ((thing) ? "true" : "false")
