@@ -216,3 +216,37 @@ int gen_tmp_filename(char* buffer, size_t buffer_size) {
   return 0;
 #endif
 }
+
+/* === Compressed file I/O === */
+
+bool ends_with(const char* s, const char* suffix) {
+  size_t slen = strlen(s);
+  size_t suflen = strlen(suffix);
+  return slen >= suflen && strcmp(s + slen - suflen, suffix) == 0;
+}
+
+bool is_xz(const char* path)  { return ends_with(path, ".xz"); }
+bool is_zst(const char* path) { return ends_with(path, ".zst"); }
+bool is_gz(const char* path)  { return ends_with(path, ".gz"); }
+bool is_compressed(const char* path) { return is_xz(path) || is_zst(path) || is_gz(path); }
+
+static FILE* open_pipe(const char* cmd, const char* path) {
+  char buf[4096];
+  snprintf(buf, sizeof(buf), "%s '%s'", cmd, path);
+  return popen(buf, "r");
+}
+
+FILE* open_xz(const char* path)  { return open_pipe("xz -dc", path); }
+FILE* open_zst(const char* path) { return open_pipe("zstd -dc", path); }
+FILE* open_gz(const char* path)  { return open_pipe("gzip -dc", path); }
+
+FILE* open_compressed(const char* path) {
+  if (is_xz(path))  return open_xz(path);
+  if (is_zst(path)) return open_zst(path);
+  if (is_gz(path))  return open_gz(path);
+  return fopen(path, "r");
+}
+
+void close_compressed(FILE* f) {
+  pclose(f);
+}

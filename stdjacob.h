@@ -165,4 +165,16 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define TMP_FILENAME_MAX 256
 int gen_tmp_filename(char* buffer, size_t buffer_size);
 
+// Compressed file I/O - opens files with automatic decompression
+bool ends_with(const char* s, const char* suffix);
+bool is_xz(const char* path);
+bool is_zst(const char* path);
+bool is_gz(const char* path);
+bool is_compressed(const char* path);
+FILE* open_xz(const char* path);
+FILE* open_zst(const char* path);
+FILE* open_gz(const char* path);
+FILE* open_compressed(const char* path);
+void close_compressed(FILE* f);
+
 #endif
