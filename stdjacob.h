@@ -159,7 +159,7 @@ bool is_power_of_two(uintptr_t thing);
 uint max_misalignment(uint num_bytes_to_align_to);
 #define BITS_PER_CHAR 8
 
-// Bit manipulation
+// Bit manipulation - basic ops (universal, no library needed)
 #define BIT_GET(x, n)    (((x) >> (n)) & 1)
 #define BIT_SET(x, n)    ((x) | (1 << (n)))
 #define BIT_CLEAR(x, n)  ((x) & ~(1 << (n)))
@@ -172,6 +172,26 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define BIT_2(x) BIT_GET(x, 2)
 #define BIT_1(x) BIT_GET(x, 1)
 #define BIT_0(x) BIT_GET(x, 0)
+
+// Bit counting - compiler-agnostic with C23/GCC/Clang/MSVC support
+#if __STDC_VERSION__ >= 202311L
+  #include <stdbit.h>
+  #define BIT_POPCOUNT(x)      stdc_count_ones(x)
+  #define BIT_CLZ(x)           stdc_leading_zeros(x)
+  #define BIT_CTZ(x)           stdc_trailing_zeros(x)
+#elif defined(__GNUC__) || defined(__clang__)
+  #define BIT_POPCOUNT(x)      __builtin_popcount(x)
+  #define BIT_CLZ(x)           __builtin_clz(x)
+  #define BIT_CTZ(x)           __builtin_ctz(x)
+#elif defined(_MSC_VER)
+  #include <intrin.h>
+  #define BIT_POPCOUNT(x)      __popcnt(x)
+  // MSVC CLZ/CTZ require inline functions, skip for now
+#else
+  // Fallback: naive implementations
+  #define BIT_POPCOUNT(x)      _stdjacob_popcount(x)
+  int _stdjacob_popcount(unsigned x) { int c=0; while(x) { c += x&1; x >>= 1; } return c; }
+#endif
 
 #define BOOL_TO_STR(thing) ((thing) ? "true" : "false")
 
