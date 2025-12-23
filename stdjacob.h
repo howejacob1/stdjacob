@@ -173,6 +173,17 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define BIT_1(x) BIT_GET(x, 1)
 #define BIT_0(x) BIT_GET(x, 0)
 
+// Boolean versions (return true/false)
+#define BIT_GETB(x, n)   ((bool)(((x) >> (n)) & 1))
+#define BIT_7B(x) BIT_GETB(x, 7)
+#define BIT_6B(x) BIT_GETB(x, 6)
+#define BIT_5B(x) BIT_GETB(x, 5)
+#define BIT_4B(x) BIT_GETB(x, 4)
+#define BIT_3B(x) BIT_GETB(x, 3)
+#define BIT_2B(x) BIT_GETB(x, 2)
+#define BIT_1B(x) BIT_GETB(x, 1)
+#define BIT_0B(x) BIT_GETB(x, 0)
+
 // Bit counting - compiler-agnostic with C23/GCC/Clang/MSVC support
 #if __STDC_VERSION__ >= 202311L
   #include <stdbit.h>
