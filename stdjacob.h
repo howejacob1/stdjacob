@@ -160,18 +160,18 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define BITS_PER_CHAR 8
 
 // Bit manipulation
-static inline int bit_get(int x, int n) { return (x >> n) & 1; }
-static inline int bit_set(int x, int n) { return x | (1 << n); }
-static inline int bit_clear(int x, int n) { return x & ~(1 << n); }
-static inline int bit_toggle(int x, int n) { return x ^ (1 << n); }
-static inline int bit_7(int x) { return bit_get(x, 7); }
-static inline int bit_6(int x) { return bit_get(x, 6); }
-static inline int bit_5(int x) { return bit_get(x, 5); }
-static inline int bit_4(int x) { return bit_get(x, 4); }
-static inline int bit_3(int x) { return bit_get(x, 3); }
-static inline int bit_2(int x) { return bit_get(x, 2); }
-static inline int bit_1(int x) { return bit_get(x, 1); }
-static inline int bit_0(int x) { return bit_get(x, 0); }
+#define BIT_GET(x, n)    (((x) >> (n)) & 1)
+#define BIT_SET(x, n)    ((x) | (1 << (n)))
+#define BIT_CLEAR(x, n)  ((x) & ~(1 << (n)))
+#define BIT_TOGGLE(x, n) ((x) ^ (1 << (n)))
+#define BIT_7(x) BIT_GET(x, 7)
+#define BIT_6(x) BIT_GET(x, 6)
+#define BIT_5(x) BIT_GET(x, 5)
+#define BIT_4(x) BIT_GET(x, 4)
+#define BIT_3(x) BIT_GET(x, 3)
+#define BIT_2(x) BIT_GET(x, 2)
+#define BIT_1(x) BIT_GET(x, 1)
+#define BIT_0(x) BIT_GET(x, 0)
 
 #define BOOL_TO_STR(thing) ((thing) ? "true" : "false")
 
