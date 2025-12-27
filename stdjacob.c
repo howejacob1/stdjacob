@@ -272,6 +272,17 @@ ssize_t read_definitely(int fd, void* buf, size_t count) {
   return (ssize_t)bytes_read;
 }
 
+ssize_t read_definitely_or_die(int fd, void* buf, size_t count) {
+  ssize_t result = read_definitely(fd, buf, count);
+  if (result < 0) {
+    die("read() failed");
+  }
+  if ((size_t)result < count) {
+    die("read() returned insufficient bytes");
+  }
+  return result;
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {
