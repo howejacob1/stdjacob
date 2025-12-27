@@ -13,6 +13,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <assert.h>
+#include <limits.h>
 
 // P_tmpdir is defined in stdio.h on POSIX systems
 // On Windows, we use GetTempPath instead
@@ -107,6 +108,8 @@ typedef unsigned int uint;
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
+
+#define BITS_IN(type) (sizeof(type) * CHAR_BIT)
 
 #define ZERO_STRUCT(type, var) do { \
     memset(&(var), 0, sizeof(type)); \
