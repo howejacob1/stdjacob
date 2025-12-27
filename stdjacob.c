@@ -258,6 +258,11 @@ bool are_we_root(void) {
   return getuid() == 0;
 }
 
+void die(const char* message) {
+  fprintf(stderr, "%s\n", message);
+  exit(1);
+}
+
 bool become_user(const char* username) {
   struct passwd* pw = getpwnam(username);
   if (!pw) {

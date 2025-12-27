@@ -217,6 +217,7 @@ int gen_tmp_filename(char* buffer, size_t buffer_size);
 // User/Privilege management
 bool are_we_root(void);
 bool become_user(const char* username);
+void die(const char* message);
 
 // Compressed file I/O - opens files with automatic decompression
 bool ends_with(const char* s, const char* suffix);
