@@ -108,6 +108,10 @@ typedef unsigned int uint;
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
+#define ZERO_STRUCT(type, var) do { \
+    memset(&(var), 0, sizeof(type)); \
+} while(0)
+
 void enable_emojis();
 int random_number_between_inclusive(int, int);
 void init_random();
