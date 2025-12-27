@@ -222,6 +222,9 @@ bool are_we_root(void);
 bool become_user(const char* username);
 void die(const char* message);
 
+// File I/O helpers
+ssize_t read_definitely(int fd, void* buf, size_t count);
+
 // Compressed file I/O - opens files with automatic decompression
 bool ends_with(const char* s, const char* suffix);
 bool is_xz(const char* path);

@@ -252,6 +252,26 @@ void close_compressed(FILE* f) {
   pclose(f);
 }
 
+/* === File I/O helpers === */
+
+ssize_t read_definitely(int fd, void* buf, size_t count) {
+  size_t bytes_read = 0;
+  char* buffer = (char*)buf;
+  
+  while (bytes_read < count) {
+    ssize_t n = read(fd, buffer + bytes_read, count - bytes_read);
+    if (n < 0) {
+      return -1;  // Error
+    }
+    if (n == 0) {
+      break;  // EOF
+    }
+    bytes_read += n;
+  }
+  
+  return (ssize_t)bytes_read;
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {
