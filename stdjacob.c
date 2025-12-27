@@ -1,5 +1,6 @@
 #define _XOPEN_SOURCE 500
 #include "stdjacob.h"
+#include <pwd.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
@@ -249,6 +250,28 @@ FILE* open_compressed(const char* path) {
 
 void close_compressed(FILE* f) {
   pclose(f);
+}
+
+/* === User/Privilege management === */
+
+bool become_user(const char* username) {
+  struct passwd* pw = getpwnam(username);
+  if (!pw) {
+    fprintf(stderr, "Error: user '%s' not found\n", username);
+    return false;
+  }
+
+  if (setgid(pw->pw_gid) != 0) {
+    perror("setgid");
+    return false;
+  }
+
+  if (setuid(pw->pw_uid) != 0) {
+    perror("setuid");
+    return false;
+  }
+
+  return true;
 }
 
 /* === Bit counting fallbacks (when no builtins available) === */
