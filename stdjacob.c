@@ -254,6 +254,10 @@ void close_compressed(FILE* f) {
 
 /* === User/Privilege management === */
 
+bool are_we_root(void) {
+  return getuid() == 0;
+}
+
 bool become_user(const char* username) {
   struct passwd* pw = getpwnam(username);
   if (!pw) {

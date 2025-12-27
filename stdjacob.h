@@ -215,6 +215,7 @@ uint max_misalignment(uint num_bytes_to_align_to);
 int gen_tmp_filename(char* buffer, size_t buffer_size);
 
 // User/Privilege management
+bool are_we_root(void);
 bool become_user(const char* username);
 
 // Compressed file I/O - opens files with automatic decompression
