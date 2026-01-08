@@ -155,7 +155,7 @@ int sys_page_size() {
 }
 
 bool is_page_size_correct(int page_size) {
-  uint cur_page_size = sys_page_size();
+  int cur_page_size = sys_page_size();
   if (page_size != cur_page_size) {
     return false;    
   }
@@ -375,11 +375,11 @@ bool is_pathname_media(const char* pathname) {
   if (!pathname) return false;
   
   // Find last dot in pathname
-  const char* dot = strrchr(pathname, '.');
-  bool was_dot_found = (dot != NULL) && (dot != pathname);
+  const char* dot_and_ext = strrchr(pathname, '.'); // a.b.c returns dot = ".c" 
+  bool was_dot_found = (dot_and_ext != NULL) && (dot_and_ext != pathname);
   if (!was_dot_found) return false;
   
-  const char* ext = dot + 1;
+  const char* ext = dot_and_ext + 1;
   if (*ext == '\0') return false;
   
   // Case-insensitive comparison against known extensions
