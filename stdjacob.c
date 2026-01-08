@@ -4,7 +4,9 @@
 
 #if IS_WINDOWS()
   #include <windows.h>
+  #define strcasecmp _stricmp
 #else
+  #include <strings.h>
   #ifndef P_tmpdir
     #define P_tmpdir "/tmp"
   #endif
@@ -349,3 +351,30 @@ int bit_ctz(unsigned x) {
 }
 
 #endif
+
+/* === Media file detection === */
+
+static const char* media_extensions[] = {
+  EXT_WAV, EXT_MP3, EXT_MP4, EXT_M4A, EXT_FLAC, EXT_OGG, EXT_OPUS,
+  EXT_WEBM, EXT_MKV, EXT_AVI, EXT_MOV, EXT_WMV, EXT_AAC, EXT_WMA,
+  EXT_AIFF, EXT_AIF
+};
+
+bool is_pathname_media(const char* pathname) {
+  if (!pathname) return false;
+  
+  // Find last dot in pathname
+  const char* dot = strrchr(pathname, '.');
+  if (!dot || dot == pathname) return false;
+  
+  const char* ext = dot + 1;
+  if (*ext == '\0') return false;
+  
+  // Case-insensitive comparison against known extensions
+  for (size_t i = 0; i < ARRAY_ELEMENTS(media_extensions); i++) {
+    if (strcasecmp(ext, media_extensions[i]) == 0) {
+      return true;
+    }
+  }
+  return false;
+}

@@ -238,4 +238,25 @@ FILE* open_gz(const char* path);
 FILE* open_compressed(const char* path);
 void close_compressed(FILE* f);
 
+// Media file extensions (without leading period)
+#define EXT_WAV   "wav"
+#define EXT_MP3   "mp3"
+#define EXT_MP4   "mp4"
+#define EXT_M4A   "m4a"
+#define EXT_FLAC  "flac"
+#define EXT_OGG   "ogg"
+#define EXT_OPUS  "opus"
+#define EXT_WEBM  "webm"
+#define EXT_MKV   "mkv"
+#define EXT_AVI   "avi"
+#define EXT_MOV   "mov"
+#define EXT_WMV   "wmv"
+#define EXT_AAC   "aac"
+#define EXT_WMA   "wma"
+#define EXT_AIFF  "aiff"
+#define EXT_AIF   "aif"
+
+// Media file detection
+bool is_pathname_media(const char* pathname);
+
 #endif
