@@ -4,9 +4,7 @@
 
 #if IS_WINDOWS()
   #include <windows.h>
-  #define strcasecmp _stricmp
 #else
-  #include <strings.h>
   #ifndef P_tmpdir
     #define P_tmpdir "/tmp"
   #endif
@@ -34,6 +32,19 @@ bool is_divisible_by(int thing, int by) {
 
 bool streq(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0;
+}
+
+bool streq_case_insensitive(const char* str1, const char* str2) {
+  if (str1 == str2) return true;
+  if (!str1 || !str2) return false;
+  while (*str1 && *str2) {
+    if (tolower((unsigned char)*str1) != tolower((unsigned char)*str2)) {
+      return false;
+    }
+    str1++;
+    str2++;
+  }
+  return *str1 == *str2;  // Both must be '\0'
 }
 
 void str_to_upper(char* str) {
@@ -365,14 +376,15 @@ bool is_pathname_media(const char* pathname) {
   
   // Find last dot in pathname
   const char* dot = strrchr(pathname, '.');
-  if (!dot || dot == pathname) return false;
+  bool was_dot_found = (dot != NULL) && (dot != pathname);
+  if (!was_dot_found) return false;
   
   const char* ext = dot + 1;
   if (*ext == '\0') return false;
   
   // Case-insensitive comparison against known extensions
   for (size_t i = 0; i < ARRAY_ELEMENTS(media_extensions); i++) {
-    if (strcasecmp(ext, media_extensions[i]) == 0) {
+    if (streq_case_insensitive(ext, media_extensions[i])) {
       return true;
     }
   }

@@ -120,6 +120,7 @@ int random_number_between_inclusive(int, int);
 void init_random();
 bool is_divisible_by(int, int);
 bool streq(const char* str1, const char* str2);
+bool streq_case_insensitive(const char* str1, const char* str2);
 void str_to_upper(char* str);
 void trim_whitespace(char* str);
 
