@@ -218,6 +218,9 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define TMP_FILENAME_MAX 256
 int gen_tmp_filename(char* buffer, size_t buffer_size);
 
+// ISO 8601 timestamp generation (e.g., "2025-01-08T12:34:56Z")
+void gen_iso_timestamp(char* buffer, size_t max_len);
+
 // User/Privilege management
 bool are_we_root(void);
 bool become_user(const char* username);

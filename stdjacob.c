@@ -198,6 +198,12 @@ uint max_misalignment(uint num_bytes_to_align_to) {
   return num_bytes_to_align_to - 1;
 }
 
+void gen_iso_timestamp(char* buffer, size_t max_len) {
+  time_t now = time(NULL);
+  struct tm* tm_info = gmtime(&now);
+  strftime(buffer, max_len, "%Y-%m-%dT%H:%M:%SZ", tm_info);
+}
+
 int gen_tmp_filename(char* buffer, size_t buffer_size) {
   assert(buffer != NULL);
   assert(buffer_size >= TMP_FILENAME_MAX);
