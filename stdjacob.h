@@ -134,6 +134,14 @@ void set_array_to_zero(void* array, uint num_bytes);
     }                                                   \
   } while (0);
 
+#define DIE_IF_NULL(thing)                              \
+  do {                                                  \
+    if ((thing) == NULL) {                              \
+      fprintf(stderr, "%s was null.\n", #thing);        \
+      exit(1);                                          \
+    }                                                   \
+  } while (0)
+
 bool is_stdin_closed();
 #define YN_BUFFER_SIZE 255
 bool ask_yn(const char* message, const char* error_message, bool default_is_yes);
