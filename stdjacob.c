@@ -246,6 +246,11 @@ bool ends_with(const char* s, const char* suffix) {
   return slen >= suflen && strcmp(s + slen - suflen, suffix) == 0;
 }
 
+bool ends_with_char(const char* s, char c) {
+  size_t len = strlen(s);
+  return len > 0 && s[len - 1] == c;
+}
+
 bool is_xz(const char* path)  { return ends_with(path, ".xz"); }
 bool is_zst(const char* path) { return ends_with(path, ".zst"); }
 bool is_gz(const char* path)  { return ends_with(path, ".gz"); }
