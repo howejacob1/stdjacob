@@ -263,4 +263,8 @@ void close_compressed(FILE* f);
 // Media file detection
 bool is_pathname_media(const char* pathname);
 
+// Executable path utilities
+void where_is_exe(char* buffer, size_t max_len);
+void where_is_exe_dir(char* buffer, size_t max_len);
+
 #endif

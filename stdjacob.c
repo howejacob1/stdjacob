@@ -1,6 +1,7 @@
 #define _XOPEN_SOURCE 500
 #include "stdjacob.h"
 #include <pwd.h>
+#include <libgen.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
@@ -395,4 +396,26 @@ bool is_pathname_media(const char* pathname) {
     }
   }
   return false;
+}
+
+/* === Executable path utilities === */
+
+void where_is_exe(char* buffer, size_t max_len) {
+  ssize_t len = readlink("/proc/self/exe", buffer, max_len - 1);
+  if (len < 0) {
+    die("Failed to read /proc/self/exe");
+  }
+  buffer[len] = '\0';
+}
+
+void where_is_exe_dir(char* buffer, size_t max_len) {
+  char exe_path[PATH_MAX];
+  ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+  if (len < 0) {
+    die("Failed to read /proc/self/exe");
+  }
+  exe_path[len] = '\0';
+  char* dir = dirname(exe_path);
+  strncpy(buffer, dir, max_len - 1);
+  buffer[max_len - 1] = '\0';
 }
