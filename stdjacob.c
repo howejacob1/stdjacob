@@ -251,6 +251,10 @@ bool ends_with_char(const char* s, char c) {
   return len > 0 && s[len - 1] == c;
 }
 
+bool begins_with_char(const char* s, char c) {
+  return s[0] == c;
+}
+
 bool is_xz(const char* path)  { return ends_with(path, ".xz"); }
 bool is_zst(const char* path) { return ends_with(path, ".zst"); }
 bool is_gz(const char* path)  { return ends_with(path, ".gz"); }
@@ -423,4 +427,16 @@ void where_is_exe_dir(char* buffer, size_t max_len) {
   char* dir = dirname(exe_path);
   strncpy(buffer, dir, max_len - 1);
   buffer[max_len - 1] = '\0';
+}
+
+void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending) {
+  DIE_IF_NULL(dest);
+  DIE_IF_NULL(starting);
+  DIE_IF_NULL(ending);
+  
+  bool starting_has_slash = ends_with_char(starting, '/');
+  bool ending_has_slash = (ending[0] == '/');
+  
+  const char* sep = (starting_has_slash || ending_has_slash) ? "" : "/";
+  snprintf(dest, max_size, "%s%s%s", starting, sep, ending);
 }

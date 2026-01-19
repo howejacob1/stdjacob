@@ -241,6 +241,7 @@ ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
 // Compressed file I/O - opens files with automatic decompression
 bool ends_with(const char* s, const char* suffix);
 bool ends_with_char(const char* s, char c);
+bool begins_with_char(const char* s, char c);
 bool is_xz(const char* path);
 bool is_zst(const char* path);
 bool is_gz(const char* path);
@@ -275,5 +276,8 @@ bool is_pathname_media(const char* pathname);
 // Executable path utilities
 void where_is_exe(char* buffer, size_t max_len);
 void where_is_exe_dir(char* buffer, size_t max_len);
+
+// Path manipulation
+void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending);
 
 #endif
