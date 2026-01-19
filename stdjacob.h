@@ -241,6 +241,7 @@ ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
 // Compressed file I/O - opens files with automatic decompression
 bool ends_with(const char* s, const char* suffix);
 bool ends_with_char(const char* s, char c);
+bool begins_with(const char* s, const char* prefix);
 bool begins_with_char(const char* s, char c);
 bool is_xz(const char* path);
 bool is_zst(const char* path);

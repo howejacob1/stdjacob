@@ -251,6 +251,11 @@ bool ends_with_char(const char* s, char c) {
   return len > 0 && s[len - 1] == c;
 }
 
+bool begins_with(const char* s, const char* prefix) {
+  size_t prelen = strlen(prefix);
+  return strncmp(s, prefix, prelen) == 0;
+}
+
 bool begins_with_char(const char* s, char c) {
   return s[0] == c;
 }
