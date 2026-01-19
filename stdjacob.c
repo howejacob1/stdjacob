@@ -260,6 +260,11 @@ bool begins_with_char(const char* s, char c) {
   return s[0] == c;
 }
 
+bool is_dir_dots(const char* s) {
+  DIE_IF_NULL(s);
+  return streq(s, ".") || streq(s, "..");
+}
+
 bool is_xz(const char* path)  { return ends_with(path, ".xz"); }
 bool is_zst(const char* path) { return ends_with(path, ".zst"); }
 bool is_gz(const char* path)  { return ends_with(path, ".gz"); }

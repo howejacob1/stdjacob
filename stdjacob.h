@@ -243,6 +243,7 @@ bool ends_with(const char* s, const char* suffix);
 bool ends_with_char(const char* s, char c);
 bool begins_with(const char* s, const char* prefix);
 bool begins_with_char(const char* s, char c);
+bool is_dir_dots(const char* s);
 bool is_xz(const char* path);
 bool is_zst(const char* path);
 bool is_gz(const char* path);
