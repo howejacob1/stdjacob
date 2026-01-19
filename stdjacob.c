@@ -439,9 +439,15 @@ void concat_paths(char* dest, size_t max_size, const char* starting, const char*
   DIE_IF_NULL(starting);
   DIE_IF_NULL(ending);
   
-  bool starting_has_slash = ends_with_char(starting, '/');
-  bool ending_has_slash = begins_with_char(ending, '/');
+  bool starting_ends_with_slash = ends_with_char(starting, '/');
+  bool ending_starts_with_slash = begins_with_char(ending, '/');
   
-  const char* sep = (starting_has_slash || ending_has_slash) ? "" : "/";
+  if (starting_ends_with_slash && ending_starts_with_slash) {
+    ending++;
+  }
+  
+  bool need_slash = !starting_ends_with_slash && !ending_starts_with_slash;
+  const char* sep = need_slash ? "/" : "";
+  
   snprintf(dest, max_size, "%s%s%s", starting, sep, ending);
 }
