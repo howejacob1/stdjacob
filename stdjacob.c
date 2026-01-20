@@ -2,6 +2,7 @@
 #include "stdjacob.h"
 #include <pwd.h>
 #include <libgen.h>
+#include <signal.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
@@ -331,6 +332,10 @@ bool are_we_root(void) {
 void die(const char* message) {
   fprintf(stderr, "%s\n", message);
   exit(1);
+}
+
+void kill_our_process_group(void) {
+  kill(0, SIGTERM);
 }
 
 bool become_user(const char* username) {

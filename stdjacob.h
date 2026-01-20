@@ -234,6 +234,9 @@ bool are_we_root(void);
 bool become_user(const char* username);
 void die(const char* message);
 
+// Process management
+void kill_our_process_group(void);
+
 // File I/O helpers
 ssize_t read_definitely(int fd, void* buf, size_t count);
 ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
