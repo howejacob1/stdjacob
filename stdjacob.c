@@ -343,6 +343,10 @@ double ns_to_sec(long nanoseconds) {
   return nanoseconds / 1e9;
 }
 
+double elapsed_sec(struct timespec* start, struct timespec* end) {
+  return (end->tv_sec - start->tv_sec) + ns_to_sec(end->tv_nsec - start->tv_nsec);
+}
+
 bool become_user(const char* username) {
   struct passwd* pw = getpwnam(username);
   if (!pw) {

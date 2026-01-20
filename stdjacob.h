@@ -239,6 +239,7 @@ void kill_our_process_group(void);
 
 // Time utilities
 double ns_to_sec(long nanoseconds);
+double elapsed_sec(struct timespec* start, struct timespec* end);
 
 // File I/O helpers
 ssize_t read_definitely(int fd, void* buf, size_t count);
