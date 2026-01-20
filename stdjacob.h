@@ -287,5 +287,6 @@ void where_is_exe_dir(char* buffer, size_t max_len);
 
 // Path manipulation
 void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending);
+bool is_valid_directory(const char* path);
 
 #endif

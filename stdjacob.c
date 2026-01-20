@@ -3,6 +3,7 @@
 #include <pwd.h>
 #include <libgen.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
@@ -464,4 +465,10 @@ void concat_paths(char* dest, size_t max_size, const char* starting, const char*
   const char* sep = need_slash ? "/" : "";
   
   snprintf(dest, max_size, "%s%s%s", starting, sep, ending);
+}
+
+bool is_valid_directory(const char* path) {
+  if (!path) return false;
+  struct stat st;
+  return stat(path, &st) == 0 && S_ISDIR(st.st_mode);
 }
