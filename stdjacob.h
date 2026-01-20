@@ -237,6 +237,9 @@ void die(const char* message);
 // Process management
 void kill_our_process_group(void);
 
+// Time utilities
+double ns_to_sec(long nanoseconds);
+
 // File I/O helpers
 ssize_t read_definitely(int fd, void* buf, size_t count);
 ssize_t read_definitely_or_die(int fd, void* buf, size_t count);

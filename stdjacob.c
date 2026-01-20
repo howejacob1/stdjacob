@@ -338,6 +338,10 @@ void kill_our_process_group(void) {
   kill(0, SIGTERM);
 }
 
+double ns_to_sec(long nanoseconds) {
+  return nanoseconds / 1e9;
+}
+
 bool become_user(const char* username) {
   struct passwd* pw = getpwnam(username);
   if (!pw) {
