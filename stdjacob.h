@@ -140,7 +140,7 @@ bool streq_case_insensitive(const char* str1, const char* str2);
 #define strneq_lit(s, lit) (strncmp((s), (lit), sizeof(lit) - 1) == 0)
 
 // Check if string is empty (null-terminator at start)
-#define is_str_empty(s) ((s)[0] == '\0')
+#define is_empty_str(s) ((s)[0] == '\0')
 
 // Check if string is NULL, empty, or whitespace-only
 bool is_emptyish_str(const char* s);
