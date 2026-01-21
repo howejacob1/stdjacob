@@ -108,6 +108,15 @@ typedef unsigned int uint;
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define IS_MULTIPLE_OF(x, y) (((x) % (y)) == 0)
 
+// Numeric base for strtol/strtoul
+#define BASE_10 10
+#define BASE_16 16
+#define BASE_2  2
+
+// Port number validation (TCP/UDP ports are 16-bit: 1-65535)
+#define MAX_PORT_NUMBER 65535
+#define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
+
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
 #define BITS_IN(type) (sizeof(type) * CHAR_BIT)
@@ -129,6 +138,9 @@ bool streq_case_insensitive(const char* str1, const char* str2);
 // Compare string against a literal - uses sizeof to get length at compile time
 // Note: only works with string literals, not char* variables
 #define strneq_lit(s, lit) (strncmp((s), (lit), sizeof(lit) - 1) == 0)
+
+// Check if string is empty (null-terminator at start)
+#define is_str_empty(s) ((s)[0] == '\0')
 
 void str_to_upper(char* str);
 void trim_whitespace(char* str);
