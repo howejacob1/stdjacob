@@ -324,6 +324,37 @@ ssize_t read_definitely_or_die(int fd, void* buf, size_t count) {
   return result;
 }
 
+void* slurp_file(const char* path, size_t* size) {
+  FILE* f = fopen(path, "rb");
+  if (!f) return NULL;
+
+  fseek(f, 0, SEEK_END);
+  long file_size = ftell(f);
+  fseek(f, 0, SEEK_SET);
+
+  if (file_size <= 0) {
+    fclose(f);
+    return NULL;
+  }
+
+  void* data = malloc((size_t)file_size);
+  if (!data) {
+    fclose(f);
+    return NULL;
+  }
+
+  size_t bytes_read = fread(data, 1, (size_t)file_size, f);
+  fclose(f);
+
+  if (bytes_read != (size_t)file_size) {
+    free(data);
+    return NULL;
+  }
+
+  if (size) *size = (size_t)file_size;
+  return data;
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {
