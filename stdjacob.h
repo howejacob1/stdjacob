@@ -122,6 +122,14 @@ void init_random();
 bool is_divisible_by(int, int);
 bool streq(const char* str1, const char* str2);
 bool streq_case_insensitive(const char* str1, const char* str2);
+
+// Compare first n characters (like strncmp but returns bool)
+#define strneq(s1, s2, n) (strncmp((s1), (s2), (n)) == 0)
+
+// Compare string against a literal - uses sizeof to get length at compile time
+// Note: only works with string literals, not char* variables
+#define strneq_lit(s, lit) (strncmp((s), (lit), sizeof(lit) - 1) == 0)
+
 void str_to_upper(char* str);
 void trim_whitespace(char* str);
 
