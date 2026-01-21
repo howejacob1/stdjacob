@@ -50,6 +50,15 @@ bool streq_case_insensitive(const char* str1, const char* str2) {
   return *str1 == *str2;  // Both must be '\0'
 }
 
+bool is_emptyish_str(const char* s) {
+  if (!s) return true;
+  while (*s) {
+    if (!isspace((unsigned char)*s)) return false;
+    s++;
+  }
+  return true;
+}
+
 void str_to_upper(char* str) {
   uint index = 0;
   char cur;
