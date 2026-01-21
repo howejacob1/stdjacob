@@ -106,6 +106,7 @@ typedef unsigned int uint;
 // obviously double eval'd but.... 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define IS_MULTIPLE_OF(x, y) (((x) % (y)) == 0)
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
