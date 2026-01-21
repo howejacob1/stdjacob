@@ -93,10 +93,6 @@ bool is_stdin_closed() {
   return (bool)feof(stdin);
 }
 
-bool is_empty_str(const char* str) {
-  return strlen(str) == 0;
-}  
-
 bool ask_yn(const char* message, const char* error_message, bool default_is_yes) {
   const bool invalid_input = true; // for compiler warning, technically infinite loop 
   char input[YN_BUFFER_SIZE];
