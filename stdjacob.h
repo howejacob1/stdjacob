@@ -247,6 +247,8 @@ double elapsed_sec(struct timespec* start, struct timespec* end);
 ssize_t read_definitely(int fd, void* buf, size_t count);
 ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
 void* slurp_file(const char* path, size_t* size);
+#define file_go_to_beginning(f) fseek((f), 0, SEEK_SET)
+#define file_go_to_end(f)       fseek((f), 0, SEEK_END)
 
 // Compressed file I/O - opens files with automatic decompression
 bool ends_with(const char* s, const char* suffix);
