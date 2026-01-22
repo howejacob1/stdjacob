@@ -152,6 +152,24 @@ void* malloc_or_die(size_t num_chars) {
   return result;
 }
 
+void* calloc_or_die(size_t num_members, size_t size) {
+  void* result = calloc(num_members, size);
+  if (result == NULL) {
+    fprintf(stderr, "Failed to calloc.\n");
+    exit(ENOMEM);
+  }
+  return result;
+}
+
+void* realloc_or_die(void* ptr, size_t num_bytes) {
+  void* result = realloc(ptr, num_bytes);
+  if (result == NULL) {
+    fprintf(stderr, "Failed to realloc.\n");
+    exit(ENOMEM);
+  }
+  return result;
+}
+
 int sys_page_size() {
 #if IS_WINDOWS()
   SYSTEM_INFO si;

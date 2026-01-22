@@ -182,6 +182,8 @@ uint strsize(const char* str);
 #define MALLOC(num, type) (malloc((num) * sizeof(type)))
 #define REALLOC(result, num, type) (realloc(result, (num) * sizeof(type)))
 void* malloc_or_die(size_t num_chars);
+void* calloc_or_die(size_t num_members, size_t size);
+void* realloc_or_die(void* ptr, size_t num_bytes);
 
 // generate a temporary variable name in a macro-- works because
 // macros occur on "one line" via the backslash
