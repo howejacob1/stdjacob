@@ -444,7 +444,7 @@ int bit_ctz(unsigned x) {
 static const char* media_extensions[] = {
   EXT_WAV, EXT_MP3, EXT_MP4, EXT_M4A, EXT_FLAC, EXT_OGG, EXT_OPUS,
   EXT_WEBM, EXT_MKV, EXT_AVI, EXT_MOV, EXT_WMV, EXT_AAC, EXT_WMA,
-  EXT_AIFF, EXT_AIF
+  EXT_AIFF, EXT_AIF, EXT_RIFF
 };
 
 bool is_pathname_media(const char* pathname) {

@@ -305,6 +305,7 @@ void close_compressed(FILE* f);
 #define EXT_WMA   "wma"
 #define EXT_AIFF  "aiff"
 #define EXT_AIF   "aif"
+#define EXT_RIFF  "riff"
 
 // Media file detection
 bool is_pathname_media(const char* pathname);
