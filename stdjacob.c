@@ -1,6 +1,7 @@
 #define _XOPEN_SOURCE 500
 #include "stdjacob.h"
 #include <pwd.h>
+#include <stdarg.h>
 #include <libgen.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -387,6 +388,14 @@ bool are_we_root(void) {
 void die(const char* message) {
   fprintf(stderr, "%s\n", message);
   exit(1);
+}
+
+int printferr(const char* fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  int result = vfprintf(stderr, fmt, args);
+  va_end(args);
+  return result;
 }
 
 void kill_our_process_group(void) {

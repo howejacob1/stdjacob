@@ -259,6 +259,7 @@ void gen_iso_timestamp(char* buffer, size_t max_len);
 bool are_we_root(void);
 bool become_user(const char* username);
 void die(const char* message);
+int printferr(const char* fmt, ...);
 
 // Process management
 void kill_our_process_group(void);
