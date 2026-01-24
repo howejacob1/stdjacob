@@ -218,6 +218,26 @@ static void test_is_valid_port(void) {
   assert(!is_valid_port(65536));
 }
 
+static void test_str_to_port(void) {
+  port_t port;
+  
+  // Valid ports
+  assert(str_to_port("80", &port) && port == 80);
+  assert(str_to_port("443", &port) && port == 443);
+  assert(str_to_port("8080", &port) && port == 8080);
+  assert(str_to_port("1", &port) && port == 1);
+  assert(str_to_port("65535", &port) && port == 65535);
+  
+  // Invalid ports
+  assert(!str_to_port("0", &port));
+  assert(!str_to_port("-1", &port));
+  assert(!str_to_port("65536", &port));
+  assert(!str_to_port("abc", &port));
+  assert(!str_to_port("80abc", &port));
+  assert(!str_to_port("", &port));
+  assert(!str_to_port("  ", &port));
+}
+
 static void test_bool_to_str(void) {
   assert(streq(BOOL_TO_STR(true), "true"));
   assert(streq(BOOL_TO_STR(false), "false"));
@@ -604,6 +624,7 @@ int main(void) {
   test_bits_in();
   test_zero_struct();
   test_is_valid_port();
+  test_str_to_port();
   test_bool_to_str();
 
   // Bit manipulation

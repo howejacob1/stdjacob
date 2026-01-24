@@ -433,6 +433,16 @@ int count_char_occurrences_in_file(const char* path, char c) {
   return count;
 }
 
+bool str_to_port(const char* str, port_t* out) {
+  char* end;
+  long val = strtol(str, &end, BASE_10);
+  if (end == str || !is_empty_str(end) || !is_valid_port(val)) {
+    return false;
+  }
+  *out = (port_t)val;
+  return true;
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {

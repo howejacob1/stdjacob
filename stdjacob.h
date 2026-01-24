@@ -116,6 +116,8 @@ typedef unsigned int uint;
 // Port number validation (TCP/UDP ports are 16-bit: 1-65535)
 #define MAX_PORT_NUMBER 65535
 #define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
+typedef uint16_t port_t;
+bool str_to_port(const char* str, port_t* out);
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
