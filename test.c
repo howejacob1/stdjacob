@@ -466,6 +466,25 @@ static void test_count_str_occurrences_in_file(void) {
   remove(tmp_path);
 }
 
+static void test_count_char_occurrences_in_file(void) {
+  char tmp_path[TMP_FILENAME_MAX];
+  gen_tmp_filename(tmp_path, sizeof(tmp_path));
+  
+  FILE* f = fopen(tmp_path, "w");
+  assert(f != NULL);
+  fprintf(f, "hello world\n");
+  fclose(f);
+  
+  assert(count_char_occurrences_in_file(tmp_path, 'l') == 3);
+  assert(count_char_occurrences_in_file(tmp_path, 'o') == 2);
+  assert(count_char_occurrences_in_file(tmp_path, 'h') == 1);
+  assert(count_char_occurrences_in_file(tmp_path, '\n') == 1);
+  assert(count_char_occurrences_in_file(tmp_path, 'z') == 0);
+  assert(count_char_occurrences_in_file("/nonexistent_file_12345", 'x') == -1);
+  
+  remove(tmp_path);
+}
+
 static void test_generate_uuid4(void) {
   char uuid[UUID_STR_LEN];
   generate_uuid4(uuid, sizeof(uuid));
@@ -616,6 +635,7 @@ int main(void) {
   // File I/O helpers
   test_fread_definitely();
   test_count_str_occurrences_in_file();
+  test_count_char_occurrences_in_file();
 
   // UUID generation
   test_generate_uuid4();

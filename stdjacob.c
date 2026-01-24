@@ -419,6 +419,20 @@ int count_str_occurrences_in_file(const char* path, const char* needle) {
   return count;
 }
 
+int count_char_occurrences_in_file(const char* path, char c) {
+  size_t file_size;
+  char* data = slurp_file(path, &file_size);
+  if (!data) return -1;
+
+  int count = 0;
+  for (size_t i = 0; i < file_size; i++) {
+    if (data[i] == c) count++;
+  }
+
+  free(data);
+  return count;
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {

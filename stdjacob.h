@@ -274,6 +274,7 @@ ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
 size_t fread_definitely(void* buf, size_t size, size_t nmemb, FILE* stream);
 void* slurp_file(const char* path, size_t* size);
 int count_str_occurrences_in_file(const char* path, const char* needle);
+int count_char_occurrences_in_file(const char* path, char c);
 #define file_go_to_beginning(f) fseek((f), 0, SEEK_SET)
 #define file_go_to_end(f)       fseek((f), 0, SEEK_END)
 
