@@ -271,7 +271,9 @@ double elapsed_sec(struct timespec* start, struct timespec* end);
 // File I/O helpers
 ssize_t read_definitely(int fd, void* buf, size_t count);
 ssize_t read_definitely_or_die(int fd, void* buf, size_t count);
+size_t fread_definitely(void* buf, size_t size, size_t nmemb, FILE* stream);
 void* slurp_file(const char* path, size_t* size);
+int count_str_occurrences_in_file(const char* path, const char* needle);
 #define file_go_to_beginning(f) fseek((f), 0, SEEK_SET)
 #define file_go_to_end(f)       fseek((f), 0, SEEK_END)
 
@@ -316,6 +318,10 @@ bool is_pathname_media(const char* pathname);
 // Executable path utilities
 void where_is_exe(char* buffer, size_t max_len);
 void where_is_exe_dir(char* buffer, size_t max_len);
+
+// UUID generation
+#define UUID_STR_LEN 37  // 36 chars + null terminator
+void generate_uuid4(char* buf, size_t size);
 
 // Path manipulation
 void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending);

@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #define _XOPEN_SOURCE 500
 #include "stdjacob.h"
 #include <pwd.h>
@@ -348,6 +349,22 @@ ssize_t read_definitely_or_die(int fd, void* buf, size_t count) {
   return result;
 }
 
+size_t fread_definitely(void* buf, size_t size, size_t nmemb, FILE* stream) {
+  size_t total = size * nmemb;
+  size_t bytes_read = 0;
+  char* buffer = (char*)buf;
+
+  while (bytes_read < total) {
+    size_t n = fread(buffer + bytes_read, 1, total - bytes_read, stream);
+    if (n == 0) {
+      break;  // EOF or error
+    }
+    bytes_read += n;
+  }
+
+  return bytes_read / size;  // Return number of elements, like fread
+}
+
 void* slurp_file(const char* path, size_t* size) {
   FILE* f = fopen(path, "rb");
   if (!f) return NULL;
@@ -377,6 +394,29 @@ void* slurp_file(const char* path, size_t* size) {
 
   if (size) *size = (size_t)file_size;
   return data;
+}
+
+int count_str_occurrences_in_file(const char* path, const char* needle) {
+  if (!needle || !needle[0]) return 0;
+
+  size_t file_size;
+  char* data = slurp_file(path, &file_size);
+  if (!data) return -1;
+
+  int count = 0;
+  size_t needle_len = strlen(needle);
+  char* p = data;
+  char* end = data + file_size;
+
+  while (p + needle_len <= end) {
+    char* found = memmem(p, end - p, needle, needle_len);
+    if (!found) break;
+    count++;
+    p = found + 1;  // Allow overlapping matches
+  }
+
+  free(data);
+  return count;
 }
 
 /* === User/Privilege management === */
@@ -538,4 +578,44 @@ bool is_valid_directory(const char* path) {
   if (!path) return false;
   struct stat st;
   return stat(path, &st) == 0 && S_ISDIR(st.st_mode);
+}
+
+// Fill buffer with cryptographically random bytes
+static void fill_random_bytes(uchar* buf, size_t len) {
+#if IS_WINDOWS()
+  // RtlGenRandom (SystemFunction036) - available on all Windows versions
+  extern BOOLEAN NTAPI SystemFunction036(PVOID, ULONG);
+  SystemFunction036(buf, (ULONG)len);
+#else
+  FILE* f = fopen("/dev/urandom", "rb");
+  if (f) {
+    fread_definitely(buf, 1, len, f);
+    fclose(f);
+  }
+#endif
+}
+
+void generate_uuid4(char* buf, size_t size) {
+  if (size < UUID_STR_LEN) return;
+
+  uchar bytes[16];
+  fill_random_bytes(bytes, 16);
+
+  // Set version (4) and variant bits
+  bytes[6] = (bytes[6] & 0x0F) | 0x40;
+  bytes[8] = (bytes[8] & 0x3F) | 0x80;
+
+  // UUID format: 8-4-4-4-12 (indices where dashes go: after 4, 6, 8, 10)
+  static const int dash_after[] = {4, 6, 8, 10};
+  int dash_idx = 0;
+  int pos = 0;
+
+  for (int i = 0; i < 16; i++) {
+    pos += sprintf(buf + pos, "%02x", bytes[i]);
+    if (dash_idx < 4 && i + 1 == dash_after[dash_idx]) {
+      buf[pos++] = '-';
+      dash_idx++;
+    }
+  }
+  buf[pos] = '\0';
 }

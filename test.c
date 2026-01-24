@@ -420,6 +420,78 @@ static void test_is_valid_directory(void) {
   assert(!is_valid_directory("/nonexistent_dir_12345"));
 }
 
+static void test_fread_definitely(void) {
+  // Read from /dev/urandom - should always give us exactly what we ask for
+  FILE* f = fopen("/dev/urandom", "rb");
+  assert(f != NULL);
+  
+  unsigned char buf[32];
+  size_t n = fread_definitely(buf, 1, 32, f);
+  assert(n == 32);
+  
+  fclose(f);
+}
+
+static void test_count_str_occurrences_in_file(void) {
+  // Create a temp file with known content
+  char tmp_path[TMP_FILENAME_MAX];
+  gen_tmp_filename(tmp_path, sizeof(tmp_path));
+  
+  FILE* f = fopen(tmp_path, "w");
+  assert(f != NULL);
+  fprintf(f, "hello world hello there hello\n");
+  fprintf(f, "goodbye world\n");
+  fclose(f);
+  
+  // Test counting
+  assert(count_str_occurrences_in_file(tmp_path, "hello") == 3);
+  assert(count_str_occurrences_in_file(tmp_path, "world") == 2);
+  assert(count_str_occurrences_in_file(tmp_path, "goodbye") == 1);
+  assert(count_str_occurrences_in_file(tmp_path, "notfound") == 0);
+  assert(count_str_occurrences_in_file(tmp_path, "\n") == 2);
+  
+  // Test overlapping: "aa" in "aaa" should find 2
+  FILE* f2 = fopen(tmp_path, "w");
+  fprintf(f2, "aaa");
+  fclose(f2);
+  assert(count_str_occurrences_in_file(tmp_path, "aa") == 2);
+  
+  // Test nonexistent file
+  assert(count_str_occurrences_in_file("/nonexistent_file_12345", "x") == -1);
+  
+  // Test empty needle
+  assert(count_str_occurrences_in_file(tmp_path, "") == 0);
+  
+  // Cleanup
+  remove(tmp_path);
+}
+
+static void test_generate_uuid4(void) {
+  char uuid[UUID_STR_LEN];
+  generate_uuid4(uuid, sizeof(uuid));
+  
+  // Check length (36 chars: 8-4-4-4-12)
+  assert(strlen(uuid) == 36);
+  
+  // Check dashes in right places
+  assert(uuid[8] == '-');
+  assert(uuid[13] == '-');
+  assert(uuid[18] == '-');
+  assert(uuid[23] == '-');
+  
+  // Check version nibble (should be 4)
+  assert(uuid[14] == '4');
+  
+  // Check variant nibble (should be 8, 9, a, or b)
+  char v = uuid[19];
+  assert(v == '8' || v == '9' || v == 'a' || v == 'b');
+  
+  // Generate another and make sure they're different
+  char uuid2[UUID_STR_LEN];
+  generate_uuid4(uuid2, sizeof(uuid2));
+  assert(!streq(uuid, uuid2));
+}
+
 // ============================================================================
 // File extension helpers
 // ============================================================================
@@ -540,6 +612,13 @@ int main(void) {
   // Path helpers
   test_concat_paths();
   test_is_valid_directory();
+
+  // File I/O helpers
+  test_fread_definitely();
+  test_count_str_occurrences_in_file();
+
+  // UUID generation
+  test_generate_uuid4();
 
   // File extension helpers
   test_compression_detection();
