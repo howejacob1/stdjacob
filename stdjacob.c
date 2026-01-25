@@ -41,6 +41,12 @@ int clamp_int(int val, int min, int max) {
   return val;
 }
 
+float clamp_float(float val, float min, float max) {
+  if (val < min) return min;
+  if (val > max) return max;
+  return val;
+}
+
 bool streq(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0;
 }

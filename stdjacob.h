@@ -113,6 +113,7 @@ typedef unsigned int uint;
 
 // Clamp value to range [min, max]
 int clamp_int(int val, int min, int max);
+float clamp_float(float val, float min, float max);
 #define IS_MULTIPLE_OF(x, y) (((x) % (y)) == 0)
 
 // Numeric base for strtol/strtoul
