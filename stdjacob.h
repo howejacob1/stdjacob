@@ -1,6 +1,10 @@
 #ifndef STDJACOB_H
 #define STDJACOB_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 #include <locale.h>
 #include <string.h>
@@ -329,5 +333,9 @@ void generate_uuid4(char* buf, size_t size);
 // Path manipulation
 void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending);
 bool is_valid_directory(const char* path);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif
