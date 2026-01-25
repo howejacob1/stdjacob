@@ -338,6 +338,9 @@ void generate_uuid4(char* buf, size_t size);
 void concat_paths(char* dest, size_t max_size, const char* starting, const char* ending);
 bool is_valid_directory(const char* path);
 
+// File existence check
+bool file_exists(const char* path);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

@@ -616,6 +616,10 @@ bool is_valid_directory(const char* path) {
   return stat(path, &st) == 0 && S_ISDIR(st.st_mode);
 }
 
+bool file_exists(const char* path) {
+  return access(path, F_OK) == 0;
+}
+
 // Fill buffer with cryptographically random bytes
 static void fill_random_bytes(uchar* buf, size_t len) {
 #if IS_WINDOWS()

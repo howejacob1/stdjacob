@@ -490,6 +490,12 @@ static void test_is_valid_directory(void) {
   assert(!is_valid_directory("/nonexistent_dir_12345"));
 }
 
+static void test_file_exists(void) {
+  assert(file_exists("/etc/passwd"));
+  assert(file_exists("/tmp"));
+  assert(!file_exists("/nonexistent_file_12345"));
+}
+
 static void test_fread_definitely(void) {
   // Read from /dev/urandom - should always give us exactly what we ask for
   FILE* f = fopen("/dev/urandom", "rb");
@@ -704,6 +710,7 @@ int main(void) {
   // Path helpers
   test_concat_paths();
   test_is_valid_directory();
+  test_file_exists();
 
   // File I/O helpers
   test_fread_definitely();
