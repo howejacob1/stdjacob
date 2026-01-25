@@ -110,6 +110,9 @@ typedef unsigned int uint;
 // obviously double eval'd but.... 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+// Clamp value to range [min, max]
+int clamp_int(int val, int min, int max);
 #define IS_MULTIPLE_OF(x, y) (((x) % (y)) == 0)
 
 // Numeric base for strtol/strtoul

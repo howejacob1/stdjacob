@@ -35,6 +35,12 @@ bool is_divisible_by(int thing, int by) {
   return !(thing % by);
 }
 
+int clamp_int(int val, int min, int max) {
+  if (val < min) return min;
+  if (val > max) return max;
+  return val;
+}
+
 bool streq(const char* str1, const char* str2) {
   return strcmp(str1, str2) == 0;
 }

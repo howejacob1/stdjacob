@@ -114,6 +114,31 @@ static void test_is_divisible_by(void) {
   assert(!is_divisible_by(10, 6));
 }
 
+static void test_clamp_int(void) {
+  // Value within range - return unchanged
+  assert(clamp_int(5, 0, 10) == 5);
+  assert(clamp_int(0, 0, 10) == 0);
+  assert(clamp_int(10, 0, 10) == 10);
+  
+  // Value below min - clamp to min
+  assert(clamp_int(-5, 0, 10) == 0);
+  assert(clamp_int(-100, -50, 50) == -50);
+  
+  // Value above max - clamp to max
+  assert(clamp_int(15, 0, 10) == 10);
+  assert(clamp_int(100, -50, 50) == 50);
+  
+  // Edge case: min == max
+  assert(clamp_int(5, 7, 7) == 7);
+  assert(clamp_int(7, 7, 7) == 7);
+  assert(clamp_int(9, 7, 7) == 7);
+  
+  // Negative ranges
+  assert(clamp_int(-25, -30, -20) == -25);
+  assert(clamp_int(-35, -30, -20) == -30);
+  assert(clamp_int(-15, -30, -20) == -20);
+}
+
 static void test_is_power_of_two(void) {
   assert(is_power_of_two(1));
   assert(is_power_of_two(2));
@@ -611,6 +636,7 @@ int main(void) {
 
   // Math helpers
   test_is_divisible_by();
+  test_clamp_int();
   test_is_power_of_two();
   test_random_number_between_inclusive();
 
