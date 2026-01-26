@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 199309L
 #include "stdjacob.h"
 
 // ============================================================================
@@ -466,6 +467,25 @@ static void test_elapsed_sec(void) {
   assert(elapsed > 2.19 && elapsed < 2.21);
 }
 
+static void test_get_monotonic_time_sec(void) {
+  double t1 = get_monotonic_time_sec();
+  assert(t1 > 0);  // Should be positive (system uptime in seconds)
+  
+  // Small busy wait
+  for (volatile int i = 0; i < 1000000; i++);
+  
+  double t2 = get_monotonic_time_sec();
+  assert(t2 >= t1);  // Monotonic: should never go backwards
+  
+  // Sleep for a bit and check time advances
+  struct timespec sleep_time = { .tv_sec = 0, .tv_nsec = 10000000 };  // 10ms
+  nanosleep(&sleep_time, NULL);
+  double t3 = get_monotonic_time_sec();
+  assert(t3 > t2);  // Should have advanced
+  assert((t3 - t2) >= 0.009);  // At least ~9ms should have passed
+  assert((t3 - t2) < 1.0);  // But not more than 1 second
+}
+
 // ============================================================================
 // Path helpers
 // ============================================================================
@@ -706,6 +726,7 @@ int main(void) {
   // Time helpers
   test_ns_to_sec();
   test_elapsed_sec();
+  test_get_monotonic_time_sec();
 
   // Path helpers
   test_concat_paths();

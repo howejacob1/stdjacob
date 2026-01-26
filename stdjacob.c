@@ -486,6 +486,12 @@ double elapsed_sec(struct timespec* start, struct timespec* end) {
   return (end->tv_sec - start->tv_sec) + ns_to_sec(end->tv_nsec - start->tv_nsec);
 }
 
+double get_monotonic_time_sec(void) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec + ts.tv_nsec / 1e9;
+}
+
 bool become_user(const char* username) {
   struct passwd* pw = getpwnam(username);
   if (!pw) {
