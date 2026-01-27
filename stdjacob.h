@@ -223,7 +223,7 @@ uint max_misalignment(uint num_bytes_to_align_to);
 #define BITS_PER_CHAR 8
 
 // Bit manipulation - basic ops (universal, no library needed)
-#define BIT_GET(x, n)    (((x) >> (n)) & 1u)
+#define BIT_GET(x, n)    (((unsigned)(x) >> (n)) & 1u)
 #define BIT_SET(x, n)    ((x) | (1u << (n)))
 #define BIT_CLEAR(x, n)  ((x) & ~(1u << (n)))
 #define BIT_TOGGLE(x, n) ((x) ^ (1u << (n)))
