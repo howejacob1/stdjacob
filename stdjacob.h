@@ -342,6 +342,12 @@ bool is_valid_directory(const char* path);
 // File existence check
 bool file_exists(const char* path);
 
+// CPU count - returns number of CPUs available to this process
+// On Linux: uses sched_getaffinity (respects cgroups/containers)
+// On Windows: uses GetSystemInfo
+// Fallback: uses sysconf(_SC_NPROCESSORS_ONLN)
+int num_cpus(void);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

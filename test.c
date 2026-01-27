@@ -663,6 +663,17 @@ static void test_constants(void) {
 }
 
 // ============================================================================
+// System helpers
+// ============================================================================
+
+static void test_num_cpus(void) {
+  int n = num_cpus();
+  assert(n >= 1);       // Must have at least 1 CPU
+  assert(n <= 4096);    // Sanity check - unlikely to have more than 4096 CPUs
+  printf("  num_cpus() = %d\n", n);
+}
+
+// ============================================================================
 // Main
 // ============================================================================
 
@@ -747,6 +758,9 @@ int main(void) {
 
   // Constants
   test_constants();
+
+  // System helpers
+  test_num_cpus();
 
   printf("All tests passed!\n");
   return 0;

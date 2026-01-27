@@ -15,6 +15,10 @@
   #endif
 #endif
 
+#if defined(__linux__)
+  #include <sched.h>
+#endif
+
 void enable_emojis() {
   setlocale(LC_ALL, "en_US.utf8");
 }
@@ -664,4 +668,22 @@ void generate_uuid4(char* buf, size_t size) {
     }
   }
   buf[pos] = '\0';
+}
+
+int num_cpus(void) {
+#if defined(__linux__)
+  // Linux: use sched_getaffinity (respects cgroups/containers)
+  cpu_set_t set;
+  CPU_ZERO(&set);
+  sched_getaffinity(0, sizeof(set), &set);
+  return CPU_COUNT(&set);
+#elif IS_WINDOWS()
+  // Windows: use GetSystemInfo
+  SYSTEM_INFO si;
+  GetSystemInfo(&si);
+  return (int)si.dwNumberOfProcessors;
+#else
+  // POSIX fallback (macOS, BSD, etc.)
+  return (int)sysconf(_SC_NPROCESSORS_ONLN);
+#endif
 }
