@@ -146,9 +146,9 @@ bool str_to_port(const char* str, port_t* out);
     memset(&(var), 0, sizeof(type)); \
 } while(0)
 
-void enable_emojis();
+void enable_emojis(void);
 int random_number_between_inclusive(int, int);
-void init_random();
+void init_random(void);
 bool is_divisible_by(int, int);
 bool streq(const char* str1, const char* str2);
 bool streq_case_insensitive(const char* str1, const char* str2);
@@ -187,7 +187,7 @@ void set_array_to_zero(void* array, uint num_bytes);
     }                                                   \
   } while (0)
 
-bool is_stdin_closed();
+bool is_stdin_closed(void);
 #define YN_BUFFER_SIZE 255
 bool ask_yn(const char* message, const char* error_message, bool default_is_yes);
 
@@ -213,7 +213,7 @@ void* realloc_or_die(void* ptr, size_t num_bytes);
 #define TEMP_GENERATE_NAME(prefix, line) TEMP_GENERATE_NAME_UNEXPANDED(prefix, line)
 #define TEMP(prefix) TEMP_GENERATE_NAME(prefix, __LINE__)
 
-int sys_page_size();
+int sys_page_size(void);
 bool is_page_size_correct(int page_size);
 void die_if_bad_page_size(int page_size);
 uint misalignment_amount(void* ptr, uint num_bytes_to_align_to);

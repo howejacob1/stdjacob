@@ -1,5 +1,9 @@
 CC ?= cc
-CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Wpedantic
+CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Werror -Wpedantic \
+          -Wshadow -Wdouble-promotion \
+          -Wformat=2 \
+          -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition \
+          -Wnull-dereference -Wwrite-strings
 
 TEST_BIN := test_stdjacob
 TEST_SRC := test.c stdjacob.c

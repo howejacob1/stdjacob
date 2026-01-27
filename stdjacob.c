@@ -21,7 +21,7 @@
   #include <sched.h>
 #endif
 
-void enable_emojis() {
+void enable_emojis(void) {
   setlocale(LC_ALL, "en_US.utf8");
 }
 
@@ -33,8 +33,8 @@ int random_number_between_inclusive(int start, int end) {
   return modulo_result + lowest;
 }
 
-void init_random() {
-  srand(clock());
+void init_random(void) {
+  srand((unsigned int)clock());
 }
 
 bool is_divisible_by(int thing, int by) {
@@ -84,7 +84,7 @@ void str_to_upper(char* str) {
   char cur;
   do {
     cur = str[index];
-    str[index] = toupper(cur);
+    str[index] = (char)toupper((unsigned char)cur);
     index++;
   } while (cur);
 }
@@ -109,7 +109,7 @@ void set_array_to_zero(void* array, uint num_bytes) {
   memset(array, 0, num_bytes);
 }
 
-bool is_stdin_closed() {
+bool is_stdin_closed(void) {
   return (bool)feof(stdin);
 }
 
@@ -160,7 +160,7 @@ void** malloc_voidstars(uint num_voidstars){
 }
 
 uint strsize(const char* str) {
-  return strlen(str)+1;
+  return (uint)(strlen(str)+1);
 }
 
 void* malloc_or_die(size_t num_chars) {
@@ -190,13 +190,13 @@ void* realloc_or_die(void* ptr, size_t num_bytes) {
   return result;
 }
 
-int sys_page_size() {
+int sys_page_size(void) {
 #if IS_WINDOWS()
   SYSTEM_INFO si;
   GetSystemInfo(&si);
-  return si.dwPageSize;
+  return (int)si.dwPageSize;
 #else
-  return sysconf(_SC_PAGE_SIZE);
+  return (int)sysconf(_SC_PAGE_SIZE);
 #endif
 }
 
@@ -216,7 +216,7 @@ void die_if_bad_page_size(int page_size) {
 
 uint misalignment_amount(void* ptr, uint num_bytes_to_align_to) {
   uintptr_t pointer_as_uint = (uintptr_t)ptr;
-  return pointer_as_uint % num_bytes_to_align_to;
+  return (uint)(pointer_as_uint % num_bytes_to_align_to);
 }
 
 bool is_misaligned(void* ptr, uint num_bytes_to_align_to) {
@@ -350,7 +350,7 @@ ssize_t read_definitely(int fd, void* buf, size_t count) {
     if (n == 0) {
       break;  // EOF
     }
-    bytes_read += n;
+    bytes_read += (size_t)n;
   }
   
   return (ssize_t)bytes_read;
@@ -427,7 +427,7 @@ int count_str_occurrences_in_file(const char* path, const char* needle) {
   char* end = data + file_size;
 
   while (p + needle_len <= end) {
-    char* found = memmem(p, end - p, needle, needle_len);
+    char* found = memmem(p, (size_t)(end - p), needle, needle_len);
     if (!found) break;
     count++;
     p = found + 1;  // Allow overlapping matches
@@ -485,17 +485,17 @@ void kill_our_process_group(void) {
 }
 
 double ns_to_sec(long nanoseconds) {
-  return nanoseconds / 1e9;
+  return (double)nanoseconds / 1e9;
 }
 
 double elapsed_sec(struct timespec* start, struct timespec* end) {
-  return (end->tv_sec - start->tv_sec) + ns_to_sec(end->tv_nsec - start->tv_nsec);
+  return (double)(end->tv_sec - start->tv_sec) + ns_to_sec(end->tv_nsec - start->tv_nsec);
 }
 
 double get_monotonic_time_sec(void) {
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
-  return ts.tv_sec + ts.tv_nsec / 1e9;
+  return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
 }
 
 bool become_user(const char* username) {
