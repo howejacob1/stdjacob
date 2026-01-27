@@ -2,7 +2,7 @@ CC ?= cc
 CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Werror -Wpedantic \
           -Wconversion -Wsign-conversion \
           -Wshadow -Wdouble-promotion \
-          -Wformat=2 \
+          -Wformat=2 -Wundef \
           -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition \
           -Wnull-dereference -Wwrite-strings
 
