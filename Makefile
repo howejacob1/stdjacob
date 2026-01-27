@@ -1,5 +1,6 @@
 CC ?= cc
 CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Werror -Wpedantic \
+          -Wconversion \
           -Wshadow -Wdouble-promotion \
           -Wformat=2 \
           -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition \

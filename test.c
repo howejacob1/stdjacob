@@ -235,7 +235,7 @@ static void test_is_multiple_of(void) {
 }
 
 static void test_forto(void) {
-  int sum = 0;
+  uint sum = 0;
   FORTO(i, 5) {
     sum += i;
   }
