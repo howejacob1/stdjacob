@@ -9,7 +9,7 @@ CFLAGS ?= -std=c2x -O2 -g \
           -Wduplicated-cond -Wduplicated-branches -Wlogical-op \
           -Wrestrict -Wnested-externs -Wjump-misses-init \
           -Wbad-function-cast -Wcast-align -Wfloat-equal \
-          -Walloca \
+          -Wvla -Walloca \
           -fstack-protector-strong \
           -D_FORTIFY_SOURCE=2
 

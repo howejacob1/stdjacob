@@ -101,7 +101,7 @@ typedef unsigned int uint;
 #define SCANF_SUCCESS 1
 
 #define CHAR_BUFFER(buffer_name, len_name, len) \
-  const uint len_name = len; \
+  enum { len_name = (len) }; \
   char buffer_name[len_name];
 
 // returns elements in array
