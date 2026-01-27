@@ -673,6 +673,12 @@ static void test_num_cpus(void) {
   printf("  num_cpus() = %d\n", n);
 }
 
+static void test_max_fds(void) {
+  int n = max_fds();
+  assert(n >= 64);      // Even minimal systems have at least 64 FDs
+  printf("  max_fds() = %d\n", n);
+}
+
 // ============================================================================
 // Main
 // ============================================================================
@@ -761,6 +767,7 @@ int main(void) {
 
   // System helpers
   test_num_cpus();
+  test_max_fds();
 
   printf("All tests passed!\n");
   return 0;

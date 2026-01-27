@@ -6,9 +6,11 @@
 #include <libgen.h>
 #include <signal.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
+  #include <stdio.h>  // for _getmaxstdio
 #else
   #ifndef P_tmpdir
     #define P_tmpdir "/tmp"
@@ -685,5 +687,17 @@ int num_cpus(void) {
 #else
   // POSIX fallback (macOS, BSD, etc.)
   return (int)sysconf(_SC_NPROCESSORS_ONLN);
+#endif
+}
+
+int max_fds(void) {
+#if IS_WINDOWS()
+  // Windows: return stdio limit (can be increased with _setmaxstdio)
+  return _getmaxstdio();
+#else
+  // POSIX: use getrlimit to get soft limit
+  struct rlimit rl;
+  getrlimit(RLIMIT_NOFILE, &rl);
+  return (int)rl.rlim_cur;
 #endif
 }

@@ -348,6 +348,11 @@ bool file_exists(const char* path);
 // Fallback: uses sysconf(_SC_NPROCESSORS_ONLN)
 int num_cpus(void);
 
+// Max file descriptors - returns soft limit (ulimit -n equivalent)
+// On POSIX: uses getrlimit(RLIMIT_NOFILE)
+// On Windows: returns _getmaxstdio() (typically 512-8192)
+int max_fds(void);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
