@@ -121,6 +121,10 @@ float clamp_float(float val, float min, float max);
 #define BASE_16 16
 #define BASE_2  2
 
+// Semaphore pshared argument
+#define SEM_THREAD_LOCAL   0
+#define SEM_PROCESS_SHARED 1
+
 // Port number validation (TCP/UDP ports are 16-bit: 1-65535)
 #define MAX_PORT_NUMBER 65535
 #define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
