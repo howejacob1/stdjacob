@@ -8,7 +8,7 @@ CFLAGS ?= -std=c2x -O2 -g \
           -Wnull-dereference -Wwrite-strings -Wcast-qual -Wswitch-enum \
           -Wduplicated-cond -Wduplicated-branches -Wlogical-op \
           -Wrestrict -Wnested-externs -Wjump-misses-init \
-          -Wbad-function-cast -Wcast-align \
+          -Wbad-function-cast -Wcast-align -Wfloat-equal \
           -Walloca \
           -fstack-protector-strong \
           -D_FORTIFY_SOURCE=2

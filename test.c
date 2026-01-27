@@ -1,5 +1,15 @@
 #define _POSIX_C_SOURCE 199309L
 #include "stdjacob.h"
+#include <math.h>
+
+// Float comparison helper - use epsilon for approximate equality
+static bool float_eq(float a, float b) {
+  return fabsf(a - b) < 1e-6f;
+}
+
+static bool double_eq(double a, double b) {
+  return fabs(a - b) < 1e-9;
+}
 
 // ============================================================================
 // String helpers
@@ -142,27 +152,27 @@ static void test_clamp_int(void) {
 
 static void test_clamp_float(void) {
   // Value within range - return unchanged
-  assert(clamp_float(0.5f, 0.0f, 1.0f) == 0.5f);
-  assert(clamp_float(0.0f, 0.0f, 1.0f) == 0.0f);
-  assert(clamp_float(1.0f, 0.0f, 1.0f) == 1.0f);
+  assert(float_eq(clamp_float(0.5f, 0.0f, 1.0f), 0.5f));
+  assert(float_eq(clamp_float(0.0f, 0.0f, 1.0f), 0.0f));
+  assert(float_eq(clamp_float(1.0f, 0.0f, 1.0f), 1.0f));
   
   // Value below min - clamp to min
-  assert(clamp_float(-0.5f, 0.0f, 1.0f) == 0.0f);
-  assert(clamp_float(-100.0f, -50.0f, 50.0f) == -50.0f);
+  assert(float_eq(clamp_float(-0.5f, 0.0f, 1.0f), 0.0f));
+  assert(float_eq(clamp_float(-100.0f, -50.0f, 50.0f), -50.0f));
   
   // Value above max - clamp to max
-  assert(clamp_float(1.5f, 0.0f, 1.0f) == 1.0f);
-  assert(clamp_float(100.0f, -50.0f, 50.0f) == 50.0f);
+  assert(float_eq(clamp_float(1.5f, 0.0f, 1.0f), 1.0f));
+  assert(float_eq(clamp_float(100.0f, -50.0f, 50.0f), 50.0f));
   
   // Edge case: min == max
-  assert(clamp_float(0.5f, 0.7f, 0.7f) == 0.7f);
-  assert(clamp_float(0.7f, 0.7f, 0.7f) == 0.7f);
-  assert(clamp_float(0.9f, 0.7f, 0.7f) == 0.7f);
+  assert(float_eq(clamp_float(0.5f, 0.7f, 0.7f), 0.7f));
+  assert(float_eq(clamp_float(0.7f, 0.7f, 0.7f), 0.7f));
+  assert(float_eq(clamp_float(0.9f, 0.7f, 0.7f), 0.7f));
   
   // Negative ranges
-  assert(clamp_float(-2.5f, -3.0f, -2.0f) == -2.5f);
-  assert(clamp_float(-3.5f, -3.0f, -2.0f) == -3.0f);
-  assert(clamp_float(-1.5f, -3.0f, -2.0f) == -2.0f);
+  assert(float_eq(clamp_float(-2.5f, -3.0f, -2.0f), -2.5f));
+  assert(float_eq(clamp_float(-3.5f, -3.0f, -2.0f), -3.0f));
+  assert(float_eq(clamp_float(-1.5f, -3.0f, -2.0f), -2.0f));
 }
 
 static void test_is_power_of_two(void) {
@@ -454,9 +464,9 @@ static void test_misalignment(void) {
 // ============================================================================
 
 static void test_ns_to_sec(void) {
-  assert(ns_to_sec(1000000000L) == 1.0);
-  assert(ns_to_sec(500000000L) == 0.5);
-  assert(ns_to_sec(0L) == 0.0);
+  assert(double_eq(ns_to_sec(1000000000L), 1.0));
+  assert(double_eq(ns_to_sec(500000000L), 0.5));
+  assert(double_eq(ns_to_sec(0L), 0.0));
 }
 
 static void test_elapsed_sec(void) {
