@@ -8,7 +8,7 @@ static bool float_eq(float a, float b) {
 }
 
 static bool double_eq(double a, double b) {
-  return fabs(a - b) < 1e-9;
+  return fabs(a - b) < (double)1e-9f;
 }
 
 // ============================================================================
@@ -464,9 +464,9 @@ static void test_misalignment(void) {
 // ============================================================================
 
 static void test_ns_to_sec(void) {
-  assert(double_eq(ns_to_sec(1000000000L), 1.0));
-  assert(double_eq(ns_to_sec(500000000L), 0.5));
-  assert(double_eq(ns_to_sec(0L), 0.0));
+  assert(double_eq(ns_to_sec(1000000000L), (double)1.0f));
+  assert(double_eq(ns_to_sec(500000000L), (double)0.5f));
+  assert(double_eq(ns_to_sec(0L), (double)0.0f));
 }
 
 static void test_elapsed_sec(void) {
@@ -474,7 +474,7 @@ static void test_elapsed_sec(void) {
   struct timespec end = { .tv_sec = 12, .tv_nsec = 700000000 };
   double elapsed = elapsed_sec(&start, &end);
   // Should be 2.2 seconds
-  assert(elapsed > 2.19 && elapsed < 2.21);
+  assert(elapsed > (double)2.19f && elapsed < (double)2.21f);
 }
 
 static void test_get_monotonic_time_sec(void) {
@@ -492,8 +492,8 @@ static void test_get_monotonic_time_sec(void) {
   nanosleep(&sleep_time, NULL);
   double t3 = get_monotonic_time_sec();
   assert(t3 > t2);  // Should have advanced
-  assert((t3 - t2) >= 0.009);  // At least ~9ms should have passed
-  assert((t3 - t2) < 1.0);  // But not more than 1 second
+  assert((t3 - t2) >= (double)0.009f);  // At least ~9ms should have passed
+  assert((t3 - t2) < (double)1.0f);  // But not more than 1 second
 }
 
 // ============================================================================

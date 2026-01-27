@@ -485,7 +485,7 @@ void kill_our_process_group(void) {
 }
 
 double ns_to_sec(long nanoseconds) {
-  return (double)nanoseconds / 1e9;
+  return (double)nanoseconds / (double)1e9f;
 }
 
 double elapsed_sec(struct timespec* start, struct timespec* end) {
@@ -495,7 +495,7 @@ double elapsed_sec(struct timespec* start, struct timespec* end) {
 double get_monotonic_time_sec(void) {
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
-  return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
+  return (double)ts.tv_sec + (double)ts.tv_nsec / (double)1e9f;
 }
 
 bool become_user(const char* username) {

@@ -12,6 +12,7 @@ CFLAGS ?= -std=c2x -O2 -g \
           -Wvla -Walloca \
           -Wredundant-decls -Wstrict-overflow=5 -Wpointer-arith \
           -Wstringop-overflow -Wstringop-truncation -Winit-self \
+          -Wunsuffixed-float-constants \
           -fstack-protector-strong \
           -D_FORTIFY_SOURCE=2
 
