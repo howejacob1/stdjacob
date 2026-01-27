@@ -110,7 +110,7 @@ void set_array_to_zero(void* array, uint num_bytes) {
 }
 
 bool is_stdin_closed(void) {
-  return (bool)feof(stdin);
+  return feof(stdin) != 0;
 }
 
 bool ask_yn(const char* message, const char* error_message, bool default_is_yes) {
@@ -220,7 +220,7 @@ uint misalignment_amount(void* ptr, uint num_bytes_to_align_to) {
 }
 
 bool is_misaligned(void* ptr, uint num_bytes_to_align_to) {
-  return (bool)(misalignment_amount(ptr, num_bytes_to_align_to));
+  return misalignment_amount(ptr, num_bytes_to_align_to) != 0;
 }
 
 bool is_power_of_two(uintptr_t thing) {

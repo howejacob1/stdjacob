@@ -1,10 +1,17 @@
 CC ?= cc
-CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Werror -Wpedantic \
+CFLAGS ?= -std=c2x -O2 -g \
+          -Wall -Wextra -Werror -Wpedantic \
           -Wconversion -Wsign-conversion \
           -Wshadow -Wdouble-promotion \
           -Wformat=2 -Wundef \
           -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition \
-          -Wnull-dereference -Wwrite-strings -Wcast-qual -Wswitch-enum
+          -Wnull-dereference -Wwrite-strings -Wcast-qual -Wswitch-enum \
+          -Wduplicated-cond -Wduplicated-branches -Wlogical-op \
+          -Wrestrict -Wnested-externs -Wjump-misses-init \
+          -Wbad-function-cast -Wcast-align \
+          -Walloca \
+          -fstack-protector-strong \
+          -D_FORTIFY_SOURCE=2
 
 TEST_BIN := test_stdjacob
 TEST_SRC := test.c stdjacob.c
