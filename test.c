@@ -679,6 +679,27 @@ static void test_max_fds(void) {
   printf("  max_fds() = %d\n", n);
 }
 
+static void test_semaphore_helpers(void) {
+  sem_t sem;
+  
+  // Test thread-local semaphore
+  create_sem_thread_local(&sem);
+  // Post and wait should work
+  sem_post(&sem);
+  int ret = sem_trywait(&sem);
+  assert(ret == 0);
+  sem_destroy(&sem);
+  
+  // Test process-shared semaphore
+  create_sem_process_shared(&sem);
+  sem_post(&sem);
+  ret = sem_trywait(&sem);
+  assert(ret == 0);
+  sem_destroy(&sem);
+  
+  printf("  semaphore helpers: ok\n");
+}
+
 // ============================================================================
 // Main
 // ============================================================================
@@ -768,6 +789,7 @@ int main(void) {
   // System helpers
   test_num_cpus();
   test_max_fds();
+  test_semaphore_helpers();
 
   printf("All tests passed!\n");
   return 0;

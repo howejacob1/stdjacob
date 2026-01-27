@@ -701,3 +701,16 @@ int max_fds(void) {
   return (int)rl.rlim_cur;
 #endif
 }
+
+#if !IS_WINDOWS()
+#include <semaphore.h>
+
+void create_sem_thread_local(sem_t* sem) {
+  sem_init(sem, SEM_THREAD_LOCAL, 0);
+}
+
+void create_sem_process_shared(sem_t* sem) {
+  sem_init(sem, SEM_PROCESS_SHARED, 0);
+}
+
+#endif

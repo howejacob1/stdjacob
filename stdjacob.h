@@ -125,6 +125,13 @@ float clamp_float(float val, float min, float max);
 #define SEM_THREAD_LOCAL   0
 #define SEM_PROCESS_SHARED 1
 
+// Semaphore helpers (POSIX only)
+#if !IS_WINDOWS()
+#include <semaphore.h>
+void create_sem_thread_local(sem_t* sem);
+void create_sem_process_shared(sem_t* sem);
+#endif
+
 // Port number validation (TCP/UDP ports are 16-bit: 1-65535)
 #define MAX_PORT_NUMBER 65535
 #define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
