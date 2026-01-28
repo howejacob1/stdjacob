@@ -70,6 +70,14 @@ bool streq_case_insensitive(const char* str1, const char* str2) {
   return *str1 == *str2;  // Both must be '\0'
 }
 
+bool is_str_in_str(const char* haystack, const char* needle) {
+  return strstr(haystack, needle) != NULL;
+}
+
+bool is_char_in_str(const char* haystack, char needle) {
+  return strchr(haystack, needle) != NULL;
+}
+
 bool is_emptyish_str(const char* s) {
   if (!s) return true;
   while (*s) {

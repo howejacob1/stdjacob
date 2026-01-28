@@ -28,6 +28,23 @@ static void test_streq_case_insensitive(void) {
   assert(!streq_case_insensitive("abc", "abcd"));
 }
 
+static void test_is_str_in_str(void) {
+  assert(is_str_in_str("hello world", "world"));
+  assert(is_str_in_str("hello world", "hello"));
+  assert(is_str_in_str("hello world", "o w"));
+  assert(!is_str_in_str("hello world", "xyz"));
+  assert(is_str_in_str("hello", ""));  // empty needle always found
+  assert(is_str_in_str("hello", "hello"));  // exact match
+}
+
+static void test_is_char_in_str(void) {
+  assert(is_char_in_str("hello", 'e'));
+  assert(is_char_in_str("hello", 'h'));
+  assert(is_char_in_str("hello", 'o'));
+  assert(!is_char_in_str("hello", 'x'));
+  assert(!is_char_in_str("", 'a'));
+}
+
 static void test_is_emptyish_str(void) {
   assert(is_emptyish_str("   \t\n"));
   assert(is_emptyish_str(""));
@@ -720,6 +737,8 @@ int main(void) {
   // String helpers
   test_streq();
   test_streq_case_insensitive();
+  test_is_str_in_str();
+  test_is_char_in_str();
   test_is_emptyish_str();
   test_is_empty_str();
   test_strneq();

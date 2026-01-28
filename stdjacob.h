@@ -152,6 +152,8 @@ void init_random(void);
 bool is_divisible_by(int, int);
 bool streq(const char* str1, const char* str2);
 bool streq_case_insensitive(const char* str1, const char* str2);
+bool is_str_in_str(const char* haystack, const char* needle);
+bool is_char_in_str(const char* haystack, char needle);
 
 // Compare first n characters (like strncmp but returns bool)
 #define strneq(s1, s2, n) (strncmp((s1), (s2), (n)) == 0)
