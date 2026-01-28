@@ -45,6 +45,24 @@ static void test_is_char_in_str(void) {
   assert(!is_char_in_str("", 'a'));
 }
 
+static void test_find_str_in_str(void) {
+  uint idx;
+  assert(find_str_in_str("hello world", "world", &idx) && idx == 6);
+  assert(find_str_in_str("hello world", "hello", &idx) && idx == 0);
+  assert(find_str_in_str("hello world", "o w", &idx) && idx == 4);
+  assert(!find_str_in_str("hello world", "xyz", &idx));
+  assert(find_str_in_str("hello", "", &idx) && idx == 0);  // empty needle
+}
+
+static void test_find_char_in_str(void) {
+  uint idx;
+  assert(find_char_in_str("hello", 'e', &idx) && idx == 1);
+  assert(find_char_in_str("hello", 'h', &idx) && idx == 0);
+  assert(find_char_in_str("hello", 'o', &idx) && idx == 4);
+  assert(!find_char_in_str("hello", 'x', &idx));
+  assert(!find_char_in_str("", 'a', &idx));
+}
+
 static void test_is_emptyish_str(void) {
   assert(is_emptyish_str("   \t\n"));
   assert(is_emptyish_str(""));
@@ -739,6 +757,8 @@ int main(void) {
   test_streq_case_insensitive();
   test_is_str_in_str();
   test_is_char_in_str();
+  test_find_str_in_str();
+  test_find_char_in_str();
   test_is_emptyish_str();
   test_is_empty_str();
   test_strneq();

@@ -78,6 +78,20 @@ bool is_char_in_str(const char* haystack, char needle) {
   return strchr(haystack, needle) != NULL;
 }
 
+bool find_str_in_str(const char* haystack, const char* needle, uint* index) {
+  const char* p = strstr(haystack, needle);
+  if (p == NULL) return false;
+  *index = (uint)(p - haystack);
+  return true;
+}
+
+bool find_char_in_str(const char* haystack, char needle, uint* index) {
+  const char* p = strchr(haystack, needle);
+  if (p == NULL) return false;
+  *index = (uint)(p - haystack);
+  return true;
+}
+
 bool is_emptyish_str(const char* s) {
   if (!s) return true;
   while (*s) {
