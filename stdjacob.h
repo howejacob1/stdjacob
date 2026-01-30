@@ -368,6 +368,11 @@ int num_cpus(void);
 // On Windows: returns _getmaxstdio() (typically 512-8192)
 int max_fds(void);
 
+// Array helpers
+// Find maximum value in unsigned integer array
+// Returns the maximum value found, or 0 if array is empty
+uint find_max_uint(const uint* uint_array, uint uint_array_size);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

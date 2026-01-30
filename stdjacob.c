@@ -724,6 +724,21 @@ int max_fds(void) {
 #endif
 }
 
+uint find_max_uint(const uint* uint_array, uint uint_array_size) {
+  if (uint_array == NULL || uint_array_size == 0) {
+    return 0;
+  }
+  
+  uint max_value = uint_array[0];
+  FORTO(i, uint_array_size) {
+    if (uint_array[i] > max_value) {
+      max_value = uint_array[i];
+    }
+  }
+  
+  return max_value;
+}
+
 #if !IS_WINDOWS()
 #include <semaphore.h>
 

@@ -746,6 +746,51 @@ static void test_semaphore_helpers(void) {
 }
 
 // ============================================================================
+// Array helpers
+// ============================================================================
+
+static void test_find_max_uint(void) {
+  // Basic test with multiple elements
+  uint arr1[] = {5, 2, 8, 1, 9, 3};
+  assert(find_max_uint(arr1, ARRAY_ELEMENTS(arr1)) == 9);
+  
+  // Single element
+  uint arr2[] = {42};
+  assert(find_max_uint(arr2, ARRAY_ELEMENTS(arr2)) == 42);
+  
+  // All same values
+  uint arr3[] = {7, 7, 7, 7};
+  assert(find_max_uint(arr3, ARRAY_ELEMENTS(arr3)) == 7);
+  
+  // Max is first
+  uint arr4[] = {100, 50, 25, 10};
+  assert(find_max_uint(arr4, ARRAY_ELEMENTS(arr4)) == 100);
+  
+  // Max is last
+  uint arr5[] = {10, 25, 50, 100};
+  assert(find_max_uint(arr5, ARRAY_ELEMENTS(arr5)) == 100);
+  
+  // With zeros
+  uint arr6[] = {0, 5, 0, 3, 0};
+  assert(find_max_uint(arr6, ARRAY_ELEMENTS(arr6)) == 5);
+  
+  // All zeros
+  uint arr7[] = {0, 0, 0};
+  assert(find_max_uint(arr7, ARRAY_ELEMENTS(arr7)) == 0);
+  
+  // NULL pointer
+  assert(find_max_uint(NULL, 5) == 0);
+  
+  // Empty array (size 0)
+  uint arr8[] = {1, 2, 3};
+  assert(find_max_uint(arr8, 0) == 0);
+  
+  // Large numbers
+  uint arr9[] = {UINT_MAX - 1, UINT_MAX, 100};
+  assert(find_max_uint(arr9, ARRAY_ELEMENTS(arr9)) == UINT_MAX);
+}
+
+// ============================================================================
 // Main
 // ============================================================================
 
@@ -839,6 +884,9 @@ int main(void) {
   test_num_cpus();
   test_max_fds();
   test_semaphore_helpers();
+
+  // Array helpers
+  test_find_max_uint();
 
   printf("All tests passed!\n");
   return 0;
