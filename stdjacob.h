@@ -111,6 +111,10 @@ typedef unsigned int uint;
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+// Min/Max of 3 values
+int min3(int a, int b, int c);
+int max3(int a, int b, int c);
+
 // Clamp value to range [min, max]
 int clamp_int(int val, int min, int max);
 float clamp_float(float val, float min, float max);

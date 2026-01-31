@@ -184,6 +184,18 @@ static void test_is_divisible_by(void) {
   assert(!is_divisible_by(10, 6));
 }
 
+static void test_min3_max3(void) {
+  assert(min3(1, 2, 3) == 1);
+  assert(min3(3, 1, 2) == 1);
+  assert(min3(2, 3, 1) == 1);
+  assert(min3(1, 1, 1) == 1);
+  
+  assert(max3(1, 2, 3) == 3);
+  assert(max3(3, 1, 2) == 3);
+  assert(max3(2, 3, 1) == 3);
+  assert(max3(3, 3, 3) == 3);
+}
+
 static void test_clamp_int(void) {
   // Value within range - return unchanged
   assert(clamp_int(5, 0, 10) == 5);
@@ -845,6 +857,7 @@ int main(void) {
 
   // Math helpers
   test_is_divisible_by();
+  test_min3_max3();
   test_clamp_int();
   test_clamp_float();
   test_is_power_of_two();

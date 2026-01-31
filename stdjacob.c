@@ -41,6 +41,20 @@ bool is_divisible_by(int thing, int by) {
   return !(thing % by);
 }
 
+int min3(int a, int b, int c) {
+  int m = a;
+  if (b < m) m = b;
+  if (c < m) m = c;
+  return m;
+}
+
+int max3(int a, int b, int c) {
+  int m = a;
+  if (b > m) m = b;
+  if (c > m) m = c;
+  return m;
+}
+
 int clamp_int(int val, int min, int max) {
   if (val < min) return min;
   if (val > max) return max;
