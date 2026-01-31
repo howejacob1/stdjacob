@@ -23,7 +23,7 @@ LDFLAGS ?= -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now \
            -fsanitize=address,undefined,leak
 
 TEST_BIN := test_stdjacob
-TEST_SRC := test.c stdjacob.c
+TEST_SRC := test.c stdjacob.c base64.c
 
 .PHONY: all test clean
 

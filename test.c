@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 199309L
 #include "stdjacob.h"
+#include "base64.h"
 #include <math.h>
 
 // Float comparison helper - use epsilon for approximate equality
@@ -832,6 +833,26 @@ static void test_find_max_uint(void) {
   assert(find_max_uint(arr9, ARRAY_ELEMENTS(arr9)) == UINT_MAX);
 }
 
+static void test_base64(void) {
+    const char* text = "Hello World";
+    size_t len = strlen(text);
+    
+    char* encoded = binary_to_base64((const uchar*)text, len);
+    assert(streq(encoded, "SGVsbG8gV29ybGQ="));
+    
+    size_t out_len;
+    uchar* decoded = base64_to_binary(encoded, &out_len);
+    assert(out_len == len);
+    assert(memcmp(decoded, text, len) == 0);
+    
+    free(encoded);
+    free(decoded);
+    
+    // Test invalid
+    assert(!base64_is_valid("Invalid!"));
+    assert(base64_to_binary("Invalid!", &out_len) == NULL);
+}
+
 // ============================================================================
 // Main
 // ============================================================================
@@ -933,6 +954,9 @@ int main(void) {
 
   // Array helpers
   test_find_max_uint();
+
+  // Base64 helpers
+  test_base64();
 
   printf("All tests passed!\n");
   return 0;
