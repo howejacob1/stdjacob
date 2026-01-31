@@ -222,6 +222,7 @@ uint strsize(const char* str);
 void* malloc_or_die(size_t num_chars);
 void* calloc_or_die(size_t num_members, size_t size);
 void* realloc_or_die(void* ptr, size_t num_bytes);
+char* strdup_or_die(const char* str);
 
 // generate a temporary variable name in a macro-- works because
 // macros occur on "one line" via the backslash

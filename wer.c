@@ -13,22 +13,21 @@ static void free_wer_tokens(char** tokens, int count) {
     free(tokens);
 }
 
+#define INITIAL_TOKEN_CAPACITY 16
+
 // Tokenize string into array of words
 // Returns array of strings, sets *count to number of tokens
 static char** to_wer_tokens(const char* text, int* count) {
     *count = 0;
-    if (!text) return NULL;
-
     // Make a copy to modify
-    char* s = strdup(text);
-    if (!s) return NULL;
+    char* s = strdup_or_die(text);
 
     // Normalize
     str_to_lower(s);
     remove_str_punctuation(s);
 
     // First pass: count tokens? No, just realloc.
-    int capacity = 16;
+    int capacity = INITIAL_TOKEN_CAPACITY;
     char** tokens = (char**)malloc_or_die(capacity * sizeof(char*));
     
     char* saveptr;
@@ -38,7 +37,7 @@ static char** to_wer_tokens(const char* text, int* count) {
             capacity *= 2;
             tokens = (char**)realloc_or_die(tokens, capacity * sizeof(char*));
         }
-        tokens[(*count)++] = strdup(token);
+        tokens[(*count)++] = strdup_or_die(token);
         token = strtok_r(NULL, " \t\n\r", &saveptr);
     }
 

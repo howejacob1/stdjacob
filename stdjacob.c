@@ -257,6 +257,16 @@ void* realloc_or_die(void* ptr, size_t num_bytes) {
   return result;
 }
 
+char* strdup_or_die(const char* str) {
+  DIE_IF_NULL(str);
+  char* result = strdup(str);
+  if (result == NULL) {
+    fprintf(stderr, "Failed to strdup.\n");
+    exit(ENOMEM);
+  }
+  return result;
+}
+
 int sys_page_size(void) {
 #if IS_WINDOWS()
   SYSTEM_INFO si;

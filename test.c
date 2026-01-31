@@ -499,6 +499,12 @@ static void test_malloc_voidstars(void) {
   free(ptrs);
 }
 
+static void test_strdup_or_die(void) {
+  char* s = strdup_or_die("hello");
+  assert(streq(s, "hello"));
+  free(s);
+}
+
 static void test_set_array_to_zero(void) {
   int arr[] = {1, 2, 3, 4, 5};
   set_array_to_zero(arr, sizeof(arr));
@@ -889,6 +895,7 @@ int main(void) {
   test_malloc_macros();
   test_malloc_chars();
   test_malloc_voidstars();
+  test_strdup_or_die();
   test_set_array_to_zero();
 
   // Alignment helpers
