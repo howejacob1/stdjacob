@@ -833,6 +833,13 @@ static void test_find_max_uint(void) {
   assert(find_max_uint(arr9, ARRAY_ELEMENTS(arr9)) == UINT_MAX);
 }
 
+static void test_bool_to_exit_code(void) {
+    assert(bool_to_exit_code(true) == EXIT_SUCCESS);
+    assert(bool_to_exit_code(false) == EXIT_FAILURE);
+    assert(bool_to_exit_code(1) == EXIT_SUCCESS);
+    assert(bool_to_exit_code(0) == EXIT_FAILURE);
+}
+
 static void test_base64(void) {
     const char* text = "Hello World";
     size_t len = strlen(text);
@@ -954,6 +961,7 @@ int main(void) {
 
   // Array helpers
   test_find_max_uint();
+  test_bool_to_exit_code();
 
   // Base64 helpers
   test_base64();

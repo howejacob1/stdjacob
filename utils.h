@@ -388,6 +388,9 @@ int max_fds(void);
 // Returns the maximum value found, or 0 if array is empty
 uint find_max_uint(const uint* uint_array, uint uint_array_size);
 
+// Convert bool to exit code (true -> EXIT_SUCCESS, false -> EXIT_FAILURE)
+int bool_to_exit_code(bool success);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif // UTILS_H

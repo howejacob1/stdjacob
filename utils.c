@@ -794,6 +794,10 @@ uint find_max_uint(const uint* uint_array, uint uint_array_size) {
   return max_value;
 }
 
+int bool_to_exit_code(bool success) {
+    return success ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
 #if !IS_WINDOWS()
 #include <semaphore.h>
 
