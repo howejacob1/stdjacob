@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "stdjacob.h"
+#include "utils.h"
 
 // Calculate the size needed for base64 encoding
 size_t base64_encode_size(size_t input_len);

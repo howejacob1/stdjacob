@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef STDJACOB_UTILS_H
+#define STDJACOB_UTILS_H
 
 #ifdef __cplusplus
 extern "C" {
