@@ -170,7 +170,16 @@ bool find_char_in_str(const char* haystack, char needle, uint* index);
 // Check if string is NULL, empty, or whitespace-only
 bool is_emptyish_str(const char* s);
 
+// Convert string to lower case in-place
+void str_to_lower(char* str);
+
+// Convert string to upper case in-place
 void str_to_upper(char* str);
+
+// Remove punctuation from string in-place
+void remove_str_punctuation(char* str);
+
+// Trim whitespace from string in-place
 void trim_whitespace(char* str);
 
 void set_array_to_zero(void* array, uint num_bytes);

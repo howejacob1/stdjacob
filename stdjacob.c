@@ -101,6 +101,37 @@ bool is_emptyish_str(const char* s) {
   return true;
 }
 
+void str_to_lower(char* str) {
+  uint index = 0;
+  char cur;
+  do {
+    cur = str[index];
+    str[index] = (char)tolower((unsigned char)cur);
+    index++;
+  } while (cur);
+}
+
+void remove_str_punctuation(char* str) {
+  uint src_index = 0;
+  uint dest_index = 0;
+  char cur;
+  do {
+    cur = str[src_index];
+    // Keep alphanumeric and spaces
+    if (isalnum((unsigned char)cur) || isspace((unsigned char)cur) || cur == '\0') {
+      if (dest_index != src_index) {
+        str[dest_index] = cur;
+      }
+      dest_index++;
+    }
+    src_index++;
+  } while (cur);
+  // Ensure null termination if loop finished
+  if (dest_index > 0 && str[dest_index-1] != '\0') {
+      str[dest_index] = '\0';
+  }
+}
+
 void str_to_upper(char* str) {
   uint index = 0;
   char cur;

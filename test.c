@@ -89,10 +89,34 @@ static void test_strneq_lit(void) {
   assert(strneq_lit("prefix_suffix", "prefix"));
 }
 
+static void test_str_to_lower(void) {
+  char buf[] = "Hello World 123";
+  str_to_lower(buf);
+  assert(streq(buf, "hello world 123"));
+}
+
 static void test_str_to_upper(void) {
   char buf[] = "hello World 123";
   str_to_upper(buf);
   assert(streq(buf, "HELLO WORLD 123"));
+}
+
+static void test_remove_str_punctuation(void) {
+  char buf1[] = "Hello, World!";
+  remove_str_punctuation(buf1);
+  assert(streq(buf1, "Hello World"));
+
+  char buf2[] = "test.123@example.com";
+  remove_str_punctuation(buf2);
+  assert(streq(buf2, "test123examplecom"));
+
+  char buf3[] = "no_punctuation";
+  remove_str_punctuation(buf3);
+  assert(streq(buf3, "nopunctuation"));
+  
+  char buf4[] = "...";
+  remove_str_punctuation(buf4);
+  assert(streq(buf4, ""));
 }
 
 static void test_trim_whitespace(void) {
@@ -808,7 +832,9 @@ int main(void) {
   test_is_empty_str();
   test_strneq();
   test_strneq_lit();
+  test_str_to_lower();
   test_str_to_upper();
+  test_remove_str_punctuation();
   test_trim_whitespace();
   test_strsize();
   test_begins_with();
