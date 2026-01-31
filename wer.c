@@ -1,6 +1,6 @@
 #define _POSIX_C_SOURCE 200809L // For strtok_r, strdup
 #include "wer.h"
-#include "stdjacob.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -55,7 +55,7 @@ double wer(const char* str_to_analyze, const char* what_str_should_be) {
     if (n_ref == 0) {
         free_wer_tokens(hyp_tokens, n_hyp);
         free_wer_tokens(ref_tokens, n_ref);
-        return n_hyp > 0 ? 1.0 : 0.0;
+        return n_hyp > 0 ? 1.0f : 0.0f;
     }
     
     // DP Table: (n_ref + 1) x (n_hyp + 1)
