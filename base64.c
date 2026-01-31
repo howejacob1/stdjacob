@@ -68,7 +68,7 @@ static bool base64_is_valid_char(char c) {
 }
 
 size_t base64_encode_size(size_t input_len) {
-    return ((input_len + 2) / 3) * 4 + 1;  // +1 for null terminator
+    return ((input_len + 2) / 3) * 4 + SIZE_OF_NUL;
 }
 
 size_t base64_decode_size(size_t input_len) {

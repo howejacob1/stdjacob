@@ -239,6 +239,7 @@ bool is_misaligned(void* ptr, uint num_bytes_to_align_to);
 bool is_power_of_two(uintptr_t thing);
 uint max_misalignment(uint num_bytes_to_align_to);
 #define BITS_PER_CHAR 8
+#define SIZE_OF_NUL 1
 
 // Bit manipulation - basic ops (universal, no library needed)
 #define BIT_GET(x, n)    (((x) >> (n)) & 1u)
