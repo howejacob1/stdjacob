@@ -880,6 +880,7 @@ int main(void) {
 
   // String helpers
   test_streq();
+  test_streq_maybe();
   test_streq_case_insensitive();
   test_is_str_in_str();
   test_is_char_in_str();

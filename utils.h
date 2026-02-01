@@ -155,6 +155,7 @@ int random_number_between_inclusive(int, int);
 void init_random(void);
 bool is_divisible_by(int, int);
 bool streq(const char* str1, const char* str2);
+bool streq_maybe(const char* str1, const char* str2);
 bool streq_case_insensitive(const char* str1, const char* str2);
 bool is_str_in_str(const char* haystack, const char* needle);
 bool is_char_in_str(const char* haystack, char needle);
