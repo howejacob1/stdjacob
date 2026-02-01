@@ -561,6 +561,45 @@ void kill_our_process_group(void) {
   kill(0, SIGTERM);
 }
 
+void renice_maybe(int inc) {
+#if !IS_WINDOWS()
+    errno = 0;
+    int ret = nice(inc);
+    (void)ret;
+#else
+    (void)inc;
+#endif
+}
+
+void renice(int inc) {
+#if !IS_WINDOWS()
+    errno = 0;
+    int ret = nice(inc);
+    if (ret == -1 && errno != 0) {
+        perror("nice");
+        exit(1);
+    }
+#else
+    (void)inc;
+    fprintf(stderr, "renice not supported on Windows\n");
+    exit(1);
+#endif
+}
+
+int get_niceness(void) {
+#if !IS_WINDOWS()
+    errno = 0;
+    int prio = getpriority(PRIO_PROCESS, 0);
+    if (prio == -1 && errno != 0) {
+        perror("getpriority");
+        exit(1);
+    }
+    return prio;
+#else
+    return 0;
+#endif
+}
+
 double ns_to_sec(long nanoseconds) {
   return (double)nanoseconds / (double)1e9f;
 }

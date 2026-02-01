@@ -101,7 +101,7 @@ typedef unsigned int uint;
 #define SCANF_SUCCESS 1
 
 #define CHAR_BUFFER(buffer_name, len_name, len) \
-  constexpr uint len_name = (len); \
+  const uint len_name = (len); \
   char buffer_name[len_name];
 
 // returns elements in array
@@ -303,6 +303,9 @@ int printferr(const char* fmt, ...);
 
 // Process management
 void kill_our_process_group(void);
+void renice_maybe(int inc);
+void renice(int inc);
+int get_niceness(void);
 
 // Time utilities
 double ns_to_sec(long nanoseconds);

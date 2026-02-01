@@ -864,6 +864,17 @@ static void test_base64(void) {
 // Main
 // ============================================================================
 
+static void test_niceness(void) {
+#if !defined(_WIN32) && !defined(_WIN64)
+  int prio = get_niceness();
+  // Increase niceness by 1 (lower priority) - usually allowed for non-root
+  renice(1);
+  int new_prio = get_niceness();
+  assert(new_prio == prio + 1);
+  printf("  niceness test: %d -> %d\n", prio, new_prio);
+#endif
+}
+
 int main(void) {
   init_random();
 
@@ -958,6 +969,7 @@ int main(void) {
   test_num_cpus();
   test_max_fds();
   test_semaphore_helpers();
+  test_niceness();
 
   // Array helpers
   test_find_max_uint();
