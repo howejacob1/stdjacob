@@ -837,6 +837,10 @@ bool set_open_file_limit(uint64_t limit) {
 #endif
 }
 
+bool set_open_file_limit_to_max(void) {
+    return set_open_file_limit(get_open_file_limit_limit());
+}
+
 uint64_t get_open_file_limit(void) {
 #if IS_WINDOWS()
   return (uint64_t)_getmaxstdio();

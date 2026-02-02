@@ -789,6 +789,10 @@ static void test_file_limit_helpers(void) {
   // Try to set to current value (should succeed)
   assert(set_open_file_limit(soft));
   
+  // Test set_open_file_limit_to_max
+  assert(set_open_file_limit_to_max());
+  assert(get_open_file_limit() == hard);
+  
   // Try to increase slightly if possible
   if (soft < hard) {
       assert(set_open_file_limit(soft + 1));

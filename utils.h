@@ -389,6 +389,7 @@ int max_fds(void);
 
 // File descriptor limit helpers (Linux/POSIX only)
 bool set_open_file_limit(uint64_t limit);
+bool set_open_file_limit_to_max(void);
 uint64_t get_open_file_limit(void);
 uint64_t get_open_file_limit_limit(void);
 bool could_set_open_file_limit_to(uint64_t limit);
