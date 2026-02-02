@@ -387,6 +387,12 @@ int num_cpus(void);
 // On Windows: returns _getmaxstdio() (typically 512-8192)
 int max_fds(void);
 
+// File descriptor limit helpers (Linux/POSIX only)
+bool set_open_file_limit(uint64_t limit);
+uint64_t get_open_file_limit(void);
+uint64_t get_open_file_limit_limit(void);
+bool could_set_open_file_limit_to(uint64_t limit);
+
 // Array helpers
 // Find maximum value in unsigned integer array
 // Returns the maximum value found, or 0 if array is empty

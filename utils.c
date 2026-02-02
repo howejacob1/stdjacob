@@ -823,6 +823,48 @@ int max_fds(void) {
 #endif
 }
 
+bool set_open_file_limit(uint64_t limit) {
+#if IS_WINDOWS()
+  return false;
+#else
+  struct rlimit rl;
+  if (getrlimit(RLIMIT_NOFILE, &rl) != 0) return false;
+  
+  rl.rlim_cur = (rlim_t)limit;
+  if (limit > rl.rlim_max) rl.rlim_max = (rlim_t)limit; // Try to raise hard limit too if we can (root)
+  
+  return setrlimit(RLIMIT_NOFILE, &rl) == 0;
+#endif
+}
+
+uint64_t get_open_file_limit(void) {
+#if IS_WINDOWS()
+  return (uint64_t)_getmaxstdio();
+#else
+  struct rlimit rl;
+  if (getrlimit(RLIMIT_NOFILE, &rl) != 0) return 0;
+  return (uint64_t)rl.rlim_cur;
+#endif
+}
+
+uint64_t get_open_file_limit_limit(void) {
+#if IS_WINDOWS()
+  return 8192; // Typical max for _setmaxstdio on Windows
+#else
+  struct rlimit rl;
+  if (getrlimit(RLIMIT_NOFILE, &rl) != 0) return 0;
+  return (uint64_t)rl.rlim_max;
+#endif
+}
+
+bool could_set_open_file_limit_to(uint64_t limit) {
+#if IS_WINDOWS()
+  return limit <= 8192;
+#else
+  return limit <= get_open_file_limit_limit();
+#endif
+}
+
 uint find_max_uint(const uint* uint_array, uint uint_array_size) {
   if (uint_array == NULL || uint_array_size == 0) {
     return 0;

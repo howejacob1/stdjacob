@@ -23,6 +23,14 @@ static void test_streq(void) {
   assert(streq("", ""));
 }
 
+static void test_streq_maybe(void) {
+  assert(streq_maybe("abc", "abc"));
+  assert(!streq_maybe("abc", "ab"));
+  assert(!streq_maybe("abc", NULL));
+  assert(!streq_maybe(NULL, "abc"));
+  assert(!streq_maybe(NULL, NULL));
+}
+
 static void test_streq_case_insensitive(void) {
   assert(streq_case_insensitive("AbC", "aBc"));
   assert(streq_case_insensitive("HELLO", "hello"));
@@ -767,6 +775,29 @@ static void test_max_fds(void) {
   printf("  max_fds() = %d\n", n);
 }
 
+static void test_file_limit_helpers(void) {
+  uint64_t soft = get_open_file_limit();
+  uint64_t hard = get_open_file_limit_limit();
+  printf("  file limits: soft=%lu, hard=%lu\n", (unsigned long)soft, (unsigned long)hard);
+  
+  assert(soft > 0);
+  assert(hard >= soft);
+  
+  assert(could_set_open_file_limit_to(soft));
+  assert(!could_set_open_file_limit_to(hard + 1)); // Cannot exceed hard limit (unless root, but test assumes non-root usually)
+  
+  // Try to set to current value (should succeed)
+  assert(set_open_file_limit(soft));
+  
+  // Try to increase slightly if possible
+  if (soft < hard) {
+      assert(set_open_file_limit(soft + 1));
+      assert(get_open_file_limit() == soft + 1);
+      // Restore
+      set_open_file_limit(soft);
+  }
+}
+
 static void test_semaphore_helpers(void) {
   sem_t sem;
   
@@ -969,6 +1000,7 @@ int main(void) {
   // System helpers
   test_num_cpus();
   test_max_fds();
+  test_file_limit_helpers();
   test_semaphore_helpers();
   test_niceness();
 
