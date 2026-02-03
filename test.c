@@ -910,6 +910,12 @@ static void test_niceness(void) {
 #endif
 }
 
+static void test_set_num_omp_threads(void) {
+  // Just verify it doesn't crash
+  set_num_omp_threads(4);
+  set_num_omp_threads(1);
+}
+
 int main(void) {
   init_random();
 
@@ -1014,6 +1020,9 @@ int main(void) {
 
   // Base64 helpers
   test_base64();
+
+  // OpenMP helpers
+  test_set_num_omp_threads();
 
   printf("All tests passed!\n");
   return 0;

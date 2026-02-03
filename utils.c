@@ -73,7 +73,7 @@ bool streq(const char* str1, const char* str2) {
 
 bool streq_maybe(const char* str1, const char* str2) {
   if (!str1 || !str2) return false;
-  return strcmp(str1, str2) == 0;
+  return streq(str1, str2);
 }
 
 bool streq_case_insensitive(const char* str1, const char* str2) {
