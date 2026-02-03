@@ -402,6 +402,9 @@ uint find_max_uint(const uint* uint_array, uint uint_array_size);
 // Convert bool to exit code (true -> EXIT_SUCCESS, false -> EXIT_FAILURE)
 int bool_to_exit_code(bool success);
 
+// OpenMP helpers
+void set_num_omp_threads(int n);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif // UTILS_H

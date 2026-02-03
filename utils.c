@@ -900,3 +900,23 @@ void create_sem_process_shared(sem_t* sem) {
 }
 
 #endif
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+void set_num_omp_threads(int n) {
+#ifdef _OPENMP
+    omp_set_num_threads(n);
+#else
+    // If OpenMP is not enabled at compile time, try setting environment variable
+    // just in case it's dynamically loaded or used by dependencies
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%d", n);
+    #if IS_WINDOWS()
+        SetEnvironmentVariable("OMP_NUM_THREADS", buf);
+    #else
+        setenv("OMP_NUM_THREADS", buf, 1);
+    #endif
+#endif
+}
