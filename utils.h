@@ -403,7 +403,7 @@ uint find_max_uint(const uint* uint_array, uint uint_array_size);
 int bool_to_exit_code(bool success);
 
 // OpenMP helpers
-void set_num_omp_threads(int n);
+void set_num_omp_threads(uint n);
 
 #ifdef __cplusplus
 } // extern "C"
