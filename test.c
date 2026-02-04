@@ -143,8 +143,67 @@ static void test_trim_whitespace(void) {
 }
 
 static void test_strsize(void) {
-  assert(strsize("hello") == 6);  // includes null terminator
+  assert(strsize("hello") == 6);
   assert(strsize("") == 1);
+}
+
+static void test_total_str_array_size(void) {
+  char* texts1[] = {"abc", "def"};
+  assert(total_str_array_size(texts1, 2) == 8);
+
+  char* texts2[] = {"hello"};
+  assert(total_str_array_size(texts2, 1) == 6);
+
+  char* texts3[] = {"", ""};
+  assert(total_str_array_size(texts3, 2) == 2);
+}
+
+static void test_required_size_to_interpose_strings_with(void) {
+  char* texts1[] = {"abc", "def"};
+  assert(required_size_to_interpose_strings_with(texts1, 2, " ") == 8);
+
+  char* texts2[] = {"hello"};
+  assert(required_size_to_interpose_strings_with(texts2, 1, " ") == 6);
+
+  char* texts3[] = {"a", "b", "c"};
+  assert(required_size_to_interpose_strings_with(texts3, 3, ", ") == 8);
+
+  char* texts4[] = {"", ""};
+  assert(required_size_to_interpose_strings_with(texts4, 2, " ") == 2);
+}
+
+static void test_malloc_and_interpose_strings_with(void) {
+  char* texts1[] = {"abc", "def"};
+  char* result1 = malloc_and_interpose_strings_with(texts1, 2, " ");
+  assert(streq(result1, "abc def"));
+  free(result1);
+
+  char* texts2[] = {"hello"};
+  char* result2 = malloc_and_interpose_strings_with(texts2, 1, " ");
+  assert(streq(result2, "hello"));
+  free(result2);
+
+  char* texts3[] = {"a", "b", "c"};
+  char* result3 = malloc_and_interpose_strings_with(texts3, 3, ", ");
+  assert(streq(result3, "a, b, c"));
+  free(result3);
+
+  char* texts4[] = {"", "foo", ""};
+  char* result4 = malloc_and_interpose_strings_with(texts4, 3, " ");
+  assert(streq(result4, "foo"));
+  free(result4);
+
+  char* texts5[] = {"one"};
+  char* result5 = malloc_and_interpose_strings_with(texts5, 1, "---");
+  assert(streq(result5, "one"));
+  free(result5);
+}
+
+static void test_set_str_to_empty_str(void) {
+  char buf[] = "hello";
+  set_str_to_empty_str(buf);
+  assert(is_empty_str(buf));
+  assert(buf[0] == '\0');
 }
 
 static void test_begins_with(void) {
@@ -936,6 +995,10 @@ int main(void) {
   test_remove_str_punctuation();
   test_trim_whitespace();
   test_strsize();
+  test_total_str_array_size();
+  test_required_size_to_interpose_strings_with();
+  test_malloc_and_interpose_strings_with();
+  test_set_str_to_empty_str();
   test_begins_with();
   test_begins_with_char();
   test_ends_with();

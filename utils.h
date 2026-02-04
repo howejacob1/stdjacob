@@ -234,6 +234,10 @@ bool is_str_in_list(const char* str, const char* str_list[], uint num_strs);
 char* malloc_chars(uint num_chars);
 void** malloc_voidstars(uint num_voidstars);
 uint strsize(const char* str);
+size_t total_str_array_size(char** texts, uint count);
+size_t required_size_to_interpose_strings_with(char** texts, uint count, const char* interpose_str);
+char* malloc_and_interpose_strings_with(char** texts, uint count, const char* interpose_str);
+void set_str_to_empty_str(char* str);
 
 #define MALLOC(num, type) (malloc((num) * sizeof(type)))
 #define REALLOC(result, num, type) (realloc(result, (num) * sizeof(type)))

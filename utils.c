@@ -235,6 +235,35 @@ uint strsize(const char* str) {
   return (uint)(strlen(str)+1);
 }
 
+size_t total_str_array_size(char** texts, uint count) {
+  size_t total = 0;
+  FORTO(i, count) total += strsize(texts[i]);
+  return total;
+}
+
+size_t required_size_to_interpose_strings_with(char** texts, uint count, const char* interpose_str) {
+  if (count == 1) return strsize(texts[0]);
+  size_t total = 0;
+  FORTO(i, count) total += strlen(texts[i]);
+  return total + strlen(interpose_str) * (count - 1) + 1;
+}
+
+char* malloc_and_interpose_strings_with(char** texts, uint count, const char* interpose_str) {
+  size_t total_size = required_size_to_interpose_strings_with(texts, count, interpose_str);
+  char* str = (char*)malloc_or_die(total_size);
+  set_str_to_empty_str(str);
+  FORTO(i, count) {
+    if (is_empty_str(texts[i])) continue;
+    if (str[0]) strcat(str, interpose_str);
+    strcat(str, texts[i]);
+  }
+  return str;
+}
+
+void set_str_to_empty_str(char* str) {
+  str[0] = '\0';
+}
+
 void* malloc_or_die(size_t num_chars) {
   void* result = malloc(num_chars);
   if (result == NULL) {
