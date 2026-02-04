@@ -465,7 +465,7 @@ size_t fread_definitely(void* buf, size_t size, size_t nmemb, FILE* stream) {
   return bytes_read / size;  // Return number of elements, like fread
 }
 
-void* slurp_file(const char* path, size_t* size) {
+void* slurp_file_with_size(const char* path, size_t* size) {
   FILE* f = fopen(path, "rb");
   if (!f) return NULL;
 
@@ -500,7 +500,7 @@ int count_str_occurrences_in_file(const char* path, const char* needle) {
   if (!needle || !needle[0]) return 0;
 
   size_t file_size;
-  char* data = slurp_file(path, &file_size);
+  char* data = (char*)slurp_file_with_size(path, &file_size);
   if (!data) return -1;
 
   int count = 0;
@@ -521,7 +521,7 @@ int count_str_occurrences_in_file(const char* path, const char* needle) {
 
 int count_char_occurrences_in_file(const char* path, char c) {
   size_t file_size;
-  char* data = slurp_file(path, &file_size);
+  char* data = (char*)slurp_file_with_size(path, &file_size);
   if (!data) return -1;
 
   int count = 0;
