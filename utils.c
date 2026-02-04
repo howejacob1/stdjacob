@@ -543,6 +543,50 @@ bool str_to_port(const char* str, port_t* out) {
   return true;
 }
 
+port_t sockaddr_to_port(const sockaddr_t* addr) {
+  return ntohs(addr->sin_port);
+}
+
+port_t reserve_open_port(socket_t* sock_out) {
+#if IS_WINDOWS()
+  return 0;  // Not implemented for Windows
+#else
+  socket_t sock = socket(AF_INET, SOCK_STREAM, 0);
+  if (sock < 0) return 0;
+
+  int reuse = 1;
+  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+    close(sock);
+    return 0;
+  }
+
+  sockaddr_t addr;
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+  addr.sin_addr.s_addr = INADDR_ANY;
+  addr.sin_port = 0;  // Let OS assign port
+
+  if (bind(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+    close(sock);
+    return 0;
+  }
+
+  socklen_t len = sizeof(addr);
+  if (getsockname(sock, (struct sockaddr*)&addr, &len) < 0) {
+    close(sock);
+    return 0;
+  }
+
+  port_t port = sockaddr_to_port(&addr);
+  if (sock_out) {
+    *sock_out = sock;
+  } else {
+    close(sock);
+  }
+  return port;
+#endif
+}
+
 /* === User/Privilege management === */
 
 bool are_we_root(void) {

@@ -142,6 +142,23 @@ void create_sem_process_shared(sem_t* sem);
 typedef uint16_t port_t;
 bool str_to_port(const char* str, port_t* out);
 
+// Socket types and utilities
+#if !IS_WINDOWS()
+#include <sys/socket.h>
+#include <netinet/in.h>
+#endif
+typedef int socket_t;
+typedef struct sockaddr_in sockaddr_t;
+#define INVALID_SOCKET_VALUE (-1)
+
+// Extract port from sockaddr_t (replaces ntohs(addr.sin_port))
+port_t sockaddr_to_port(const sockaddr_t* addr);
+
+// Reserve an open port by binding to port 0, sets SO_REUSEADDR.
+// Returns the port number, writes the socket fd to *sock_out (caller must close).
+// Returns 0 on failure.
+port_t reserve_open_port(socket_t* sock_out);
+
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
 #define BITS_IN(type) (sizeof(type) * CHAR_BIT)
