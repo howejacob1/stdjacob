@@ -148,53 +148,53 @@ static void test_strsize(void) {
 }
 
 static void test_total_str_array_size(void) {
-  char* texts1[] = {"abc", "def"};
-  assert(total_str_array_size(texts1, 2) == 8);
+  const char* texts1[] = {"abc", "def"};
+  assert(total_str_array_size((char**)texts1, 2) == 8);
 
-  char* texts2[] = {"hello"};
-  assert(total_str_array_size(texts2, 1) == 6);
+  const char* texts2[] = {"hello"};
+  assert(total_str_array_size((char**)texts2, 1) == 6);
 
-  char* texts3[] = {"", ""};
-  assert(total_str_array_size(texts3, 2) == 2);
+  const char* texts3[] = {"", ""};
+  assert(total_str_array_size((char**)texts3, 2) == 2);
 }
 
 static void test_required_size_to_interpose_strings_with(void) {
-  char* texts1[] = {"abc", "def"};
-  assert(required_size_to_interpose_strings_with(texts1, 2, " ") == 8);
+  const char* texts1[] = {"abc", "def"};
+  assert(required_size_to_interpose_strings_with((char**)texts1, 2, " ") == 8);
 
-  char* texts2[] = {"hello"};
-  assert(required_size_to_interpose_strings_with(texts2, 1, " ") == 6);
+  const char* texts2[] = {"hello"};
+  assert(required_size_to_interpose_strings_with((char**)texts2, 1, " ") == 6);
 
-  char* texts3[] = {"a", "b", "c"};
-  assert(required_size_to_interpose_strings_with(texts3, 3, ", ") == 8);
+  const char* texts3[] = {"a", "b", "c"};
+  assert(required_size_to_interpose_strings_with((char**)texts3, 3, ", ") == 8);
 
-  char* texts4[] = {"", ""};
-  assert(required_size_to_interpose_strings_with(texts4, 2, " ") == 2);
+  const char* texts4[] = {"", ""};
+  assert(required_size_to_interpose_strings_with((char**)texts4, 2, " ") == 2);
 }
 
 static void test_malloc_and_interpose_strings_with(void) {
-  char* texts1[] = {"abc", "def"};
-  char* result1 = malloc_and_interpose_strings_with(texts1, 2, " ");
+  const char* texts1[] = {"abc", "def"};
+  char* result1 = malloc_and_interpose_strings_with((char**)texts1, 2, " ");
   assert(streq(result1, "abc def"));
   free(result1);
 
-  char* texts2[] = {"hello"};
-  char* result2 = malloc_and_interpose_strings_with(texts2, 1, " ");
+  const char* texts2[] = {"hello"};
+  char* result2 = malloc_and_interpose_strings_with((char**)texts2, 1, " ");
   assert(streq(result2, "hello"));
   free(result2);
 
-  char* texts3[] = {"a", "b", "c"};
-  char* result3 = malloc_and_interpose_strings_with(texts3, 3, ", ");
+  const char* texts3[] = {"a", "b", "c"};
+  char* result3 = malloc_and_interpose_strings_with((char**)texts3, 3, ", ");
   assert(streq(result3, "a, b, c"));
   free(result3);
 
-  char* texts4[] = {"", "foo", ""};
-  char* result4 = malloc_and_interpose_strings_with(texts4, 3, " ");
+  const char* texts4[] = {"", "foo", ""};
+  char* result4 = malloc_and_interpose_strings_with((char**)texts4, 3, " ");
   assert(streq(result4, "foo"));
   free(result4);
 
-  char* texts5[] = {"one"};
-  char* result5 = malloc_and_interpose_strings_with(texts5, 1, "---");
+  const char* texts5[] = {"one"};
+  char* result5 = malloc_and_interpose_strings_with((char**)texts5, 1, "---");
   assert(streq(result5, "one"));
   free(result5);
 }
@@ -671,6 +671,33 @@ static void test_file_exists(void) {
   assert(!file_exists("/nonexistent_file_12345"));
 }
 
+static void test_is_file_readable(void) {
+  assert(is_file_readable("/etc/passwd"));
+  assert(is_file_readable("/tmp"));
+  assert(!is_file_readable("/nonexistent_file_12345"));
+}
+
+static void test_str_array_append(void) {
+  char** arr = NULL;
+  size_t count = 0;
+  size_t capacity = 0;
+  
+  str_array_append("hello", &arr, &count, &capacity);
+  assert(count == 1);
+  assert(streq(arr[0], "hello"));
+  
+  str_array_append("world", &arr, &count, &capacity);
+  assert(count == 2);
+  assert(streq(arr[0], "hello"));
+  assert(streq(arr[1], "world"));
+  
+  str_array_append("test", &arr, &count, &capacity);
+  assert(count == 3);
+  assert(streq(arr[2], "test"));
+  
+  free_str_array_and_strs(arr, count);
+}
+
 static void test_fread_definitely(void) {
   // Read from /dev/urandom - should always give us exactly what we ask for
   FILE* f = fopen("/dev/urandom", "rb");
@@ -1054,6 +1081,10 @@ int main(void) {
   test_concat_paths();
   test_is_valid_directory();
   test_file_exists();
+  test_is_file_readable();
+
+  // String array helpers
+  test_str_array_append();
 
   // File I/O helpers
   test_fread_definitely();

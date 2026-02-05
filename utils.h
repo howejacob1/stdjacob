@@ -154,10 +154,8 @@ typedef struct sockaddr_in sockaddr_t;
 // Extract port from sockaddr_t (replaces ntohs(addr.sin_port))
 port_t sockaddr_to_port(const sockaddr_t* addr);
 
-// Reserve an open port by binding to port 0, sets SO_REUSEADDR.
-// Returns the port number, writes the socket fd to *sock_out (caller must close).
-// Returns 0 on failure.
-port_t reserve_open_port(socket_t* sock_out);
+port_t open_socket_on_some_port(socket_t* sock_out);
+port_t open_some_socket_on_some_port(void);
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
@@ -218,6 +216,14 @@ void set_array_to_zero(void* array, uint num_bytes);
   do {                                                  \
     if ((thing) == NULL) {                              \
       fprintf(stderr, "%s was null.\n", #thing);        \
+      exit(1);                                          \
+    }                                                   \
+  } while (0)
+
+#define DIE_IF_ZERO(thing)                              \
+  do {                                                  \
+    if ((thing) == 0) {                                 \
+      fprintf(stderr, "%s was zero.\n", #thing);        \
       exit(1);                                          \
     }                                                   \
   } while (0)
@@ -397,6 +403,32 @@ bool is_valid_directory(const char* path);
 
 // File existence check
 bool file_exists(const char* path);
+
+// File readability check (R_OK permission)
+bool is_file_readable(const char* path);
+
+// String array management
+// Append a string to a dynamic string array with automatic reallocation
+// Updates count and capacity as needed
+void str_array_append(const char* str, char*** str_array, size_t* count, size_t* capacity);
+
+// Find files recursively with given extensions
+// extensions is an array of extension strings (e.g., ".wav", ".mp3")
+// extensions_count is the number of extensions in the array
+// out_files is a pointer to a char** array that will be allocated with malloc
+// returns the number of files found
+size_t find_files_that_end_in_malloc(const char* dir_path, const char** extensions, size_t extensions_count, char*** out_files);
+
+// Free the files list allocated by find_files_that_end_in_malloc
+void free_found_files_list(char** files, size_t count);
+
+// String array memory management
+// Free individual strings in array but not the array itself
+void free_str_array_strs(char** str_array, size_t count);
+// Free the array pointer itself
+void free_str_array(char** str_array);
+// Free both the strings and the array
+void free_str_array_and_strs(char** str_array, size_t count);
 
 // CPU count - returns number of CPUs available to this process
 // On Linux: uses sched_getaffinity (respects cgroups/containers)

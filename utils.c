@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <sys/resource.h>
+#include <dirent.h>
 
 #if IS_WINDOWS()
   #include <windows.h>
@@ -576,9 +577,9 @@ port_t sockaddr_to_port(const sockaddr_t* addr) {
   return ntohs(addr->sin_port);
 }
 
-port_t reserve_open_port(socket_t* sock_out) {
+port_t open_socket_on_some_port(socket_t* sock_out) {
 #if IS_WINDOWS()
-  return 0;  // Not implemented for Windows
+  return 0;
 #else
   socket_t sock = socket(AF_INET, SOCK_STREAM, 0);
   if (sock < 0) return 0;
@@ -593,7 +594,7 @@ port_t reserve_open_port(socket_t* sock_out) {
   memset(&addr, 0, sizeof(addr));
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = INADDR_ANY;
-  addr.sin_port = 0;  // Let OS assign port
+  addr.sin_port = 0;
 
   if (bind(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
     close(sock);
@@ -614,6 +615,10 @@ port_t reserve_open_port(socket_t* sock_out) {
   }
   return port;
 #endif
+}
+
+port_t open_some_socket_on_some_port(void) {
+  return open_socket_on_some_port(NULL);
 }
 
 /* === User/Privilege management === */
@@ -824,6 +829,104 @@ bool is_valid_directory(const char* path) {
 
 bool file_exists(const char* path) {
   return access(path, F_OK) == 0;
+}
+
+bool is_file_readable(const char* path) {
+  return access(path, R_OK) == 0;
+}
+
+void str_array_append(const char* str, char*** str_array, size_t* count, size_t* capacity) {
+  if (*count >= *capacity) {
+    *capacity = *capacity ? *capacity * 2 : 16;
+    *str_array = realloc(*str_array, *capacity * sizeof(char*));
+  }
+  (*str_array)[*count] = malloc(strlen(str) + 1);
+  strcpy((*str_array)[*count], str);
+  (*count)++;
+}
+
+static bool does_filename_have_a_dot(const char* filename) {
+  const char* dot = strrchr(filename, '.');
+  return dot != NULL;
+}
+
+static bool has_matching_extension(const char* filename, const char** extensions, size_t extensions_count) {
+  if (!does_filename_have_a_dot(filename)) return false;
+  
+  const char* file_ext = strrchr(filename, '.') + 1;
+  
+  FORTO(i, extensions_count) {
+    if (streq_case_insensitive(file_ext, extensions[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+static void _find_files_that_end_in(const char* dir_path, const char** extensions, size_t extensions_count, char*** files, size_t* count, size_t* capacity) {
+  if (!is_file_readable(dir_path)) return;
+  
+  DIR* dir = opendir(dir_path);
+  if (!dir) return;
+  
+  struct dirent* entry;
+  while ((entry = readdir(dir)) != NULL) {
+    if (is_dir_dots(entry->d_name)) continue;
+    
+    char path[PATH_MAX];
+    concat_paths(path, sizeof(path), dir_path, entry->d_name);
+    
+    struct stat st;
+    if (stat(path, &st) == 0) {
+      if (S_ISDIR(st.st_mode)) {
+        _find_files_that_end_in(path, extensions, extensions_count, files, count, capacity);
+      } else if (S_ISREG(st.st_mode)) {
+        if (has_matching_extension(entry->d_name, extensions, extensions_count)) {
+          str_array_append(path, files, count, capacity);
+        }
+      }
+    }
+  }
+  closedir(dir);
+}
+
+size_t find_files_that_end_in_malloc(const char* dir_path, const char** extensions, size_t extensions_count, char*** out_files) {
+  DIE_IF_NULL(dir_path);
+  DIE_IF_NULL(extensions);
+  DIE_IF_NULL(out_files);
+  DIE_IF_ZERO(extensions_count);
+  
+  char** files = NULL;
+  size_t count = 0;
+  size_t capacity = 0;
+  
+  _find_files_that_end_in(dir_path, extensions, extensions_count, &files, &count, &capacity);
+  
+  if (count < capacity) {
+    files = realloc(files, count * sizeof(char*));
+  }
+  
+  *out_files = files;
+  return count;
+}
+
+void free_found_files_list(char** files, size_t count) {
+  free_str_array_and_strs(files, count);
+}
+
+void free_str_array_strs(char** str_array, size_t count) {
+  FORTO(i, count) {
+    free(str_array[i]);
+  }
+}
+
+void free_str_array(char** str_array) {
+  free(str_array);
+}
+
+void free_str_array_and_strs(char** str_array, size_t count) {
+  free_str_array_strs(str_array, count);
+  free_str_array(str_array);
 }
 
 // Fill buffer with cryptographically random bytes
