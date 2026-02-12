@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS ?= -O2 -Wall -std=c11
+CFLAGS ?= -O2 -Wall -Wno-unused-result -std=c11
 
 DEPFLAGS = -MMD -MP
 
