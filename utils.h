@@ -470,6 +470,12 @@ void print_stacktrace(void);
 // OpenMP helpers
 void set_num_omp_threads(uint n);
 
+#define BYTES_PER_MB (1024L * 1024L)
+
+#if defined(__linux__)
+size_t get_current_ram_usage_bytes(void);
+#endif
+
 #ifdef __cplusplus
 } // extern "C"
 #endif // UTILS_H

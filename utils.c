@@ -1090,10 +1090,23 @@ int get_current_backtrace(void** buffer, int buffer_size) {
 void print_stacktrace(void) {
     void* buffer[PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE];
     int nframes = get_current_backtrace(buffer, PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE);
-    write_buffer_to_stderr(PRINT_STACKTRACE_HEADER, sizeof(PRINT_STACKTRACE_HEADER) - 1);
+    write_buffer_to_stderr(PRINT_STACKTRACE_HEADER, strlen(PRINT_STACKTRACE_HEADER));
     backtrace_symbols_fd(buffer, nframes, STDERR_FILENO);
-    write_buffer_to_stderr(PRINT_STACKTRACE_FOOTER, sizeof(PRINT_STACKTRACE_FOOTER) - 1);
+    write_buffer_to_stderr(PRINT_STACKTRACE_FOOTER, strlen(PRINT_STACKTRACE_FOOTER));
 }
+
+#if defined(__linux__)
+size_t get_current_ram_usage_bytes(void) {
+  long rss = 0;
+  FILE* f = fopen("/proc/self/statm", "r");
+  if (f) {
+    long dummy;
+    if (fscanf(f, "%ld %ld", &dummy, &rss) != 2) rss = 0;
+    fclose(f);
+  }
+  return (size_t)rss * (size_t)sysconf(_SC_PAGESIZE);
+}
+#endif
 
 #ifdef _OPENMP
 #include <omp.h>

@@ -998,7 +998,7 @@ static void test_niceness(void) {
 
 static void test_write_buffer_to_stderr(void) {
   const char msg[] = "  test_write_buffer_to_stderr: ok\n";
-  write_buffer_to_stderr(msg, sizeof(msg) - 1);
+  write_buffer_to_stderr(msg, strlen(msg));
 }
 
 static void test_get_current_backtrace(void) {
@@ -1016,6 +1016,17 @@ static void test_set_num_omp_threads(void) {
   set_num_omp_threads(4);
   set_num_omp_threads(1);
 }
+
+#if defined(__linux__)
+static void test_get_current_ram_usage_bytes(void) {
+  size_t usage = get_current_ram_usage_bytes();
+  assert(usage > 0);
+  size_t usage_mb = usage / BYTES_PER_MB;
+  assert(usage_mb >= 1);
+  assert(usage_mb < 100000);
+  printf("  get_current_ram_usage_bytes() = %zu (%zu MB)\n", usage, usage_mb);
+}
+#endif
 
 int main(void) {
   init_random();
@@ -1137,6 +1148,11 @@ int main(void) {
 
   // OpenMP helpers
   test_set_num_omp_threads();
+
+#if defined(__linux__)
+  // RAM usage
+  test_get_current_ram_usage_bytes();
+#endif
 
   printf("All tests passed!\n");
   return 0;
