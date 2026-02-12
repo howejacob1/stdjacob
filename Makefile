@@ -1,18 +1,26 @@
-CC ?= tcc
+CC ?= gcc
 CFLAGS ?= -O2 -Wall -std=c11
 
+DEPFLAGS = -MMD -MP
+
+LIB = libstdjacob.a
 OBJS = stdjacob.o utils.o wer.o base64.o
 TEST_ELF = test
 
-all: $(OBJS) $(TEST_ELF)
+all: $(LIB) $(TEST_ELF)
+
+$(LIB): $(OBJS)
+	ar rcs $@ $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
-$(TEST_ELF): test.c $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@ -lm
+$(TEST_ELF): test.c $(LIB)
+	$(CC) $(CFLAGS) $< -L. -lstdjacob -o $@ -lm
 
 clean:
-	rm -f $(OBJS) $(TEST_ELF)
+	rm -f $(OBJS) $(LIB) $(TEST_ELF) *.d
+
+-include $(OBJS:.o=.d)
 
 .PHONY: all clean
