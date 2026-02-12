@@ -1,3 +1,6 @@
+JOBS ?= $(shell nproc --all 2>/dev/null || nproc)
+MAKEFLAGS += -j$(JOBS)
+
 CC ?= gcc
 CFLAGS ?= -O2 -Wall -Wno-unused-result -std=c11
 
