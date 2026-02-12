@@ -456,6 +456,17 @@ uint find_max_uint(const uint* uint_array, uint uint_array_size);
 // Convert bool to exit code (true -> EXIT_SUCCESS, false -> EXIT_FAILURE)
 int bool_to_exit_code(bool success);
 
+// Async-signal-safe stderr write (bypasses stdio buffering)
+void write_buffer_to_stderr(const char* buf, size_t len);
+
+// Stacktrace utilities (async-signal-safe)
+#define PRINT_STACKTRACE_HEADER "\n=== Stack trace ===\n"
+#define PRINT_STACKTRACE_FOOTER "=== End stack trace ===\n\n"
+#define PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE 64
+
+int get_current_backtrace(void** buffer, int buffer_size);
+void print_stacktrace(void);
+
 // OpenMP helpers
 void set_num_omp_threads(uint n);
 

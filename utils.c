@@ -1077,6 +1077,24 @@ void create_sem_process_shared(sem_t* sem) {
 
 #endif
 
+#include <execinfo.h>
+
+void write_buffer_to_stderr(const char* buf, size_t len) {
+    (void)write(STDERR_FILENO, buf, len);
+}
+
+int get_current_backtrace(void** buffer, int buffer_size) {
+    return backtrace(buffer, buffer_size);
+}
+
+void print_stacktrace(void) {
+    void* buffer[PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE];
+    int nframes = get_current_backtrace(buffer, PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE);
+    write_buffer_to_stderr(PRINT_STACKTRACE_HEADER, sizeof(PRINT_STACKTRACE_HEADER) - 1);
+    backtrace_symbols_fd(buffer, nframes, STDERR_FILENO);
+    write_buffer_to_stderr(PRINT_STACKTRACE_FOOTER, sizeof(PRINT_STACKTRACE_FOOTER) - 1);
+}
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif

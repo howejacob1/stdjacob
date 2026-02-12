@@ -996,8 +996,23 @@ static void test_niceness(void) {
 #endif
 }
 
+static void test_write_buffer_to_stderr(void) {
+  const char msg[] = "  test_write_buffer_to_stderr: ok\n";
+  write_buffer_to_stderr(msg, sizeof(msg) - 1);
+}
+
+static void test_get_current_backtrace(void) {
+  void* buffer[PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE];
+  int nframes = get_current_backtrace(buffer, PRINT_STACKTRACE_BACKTRACE_BUFFER_SIZE);
+  assert(nframes > 0);
+  printf("  get_current_backtrace: %d frames\n", nframes);
+}
+
+static void test_print_stacktrace(void) {
+  print_stacktrace();
+}
+
 static void test_set_num_omp_threads(void) {
-  // Just verify it doesn't crash
   set_num_omp_threads(4);
   set_num_omp_threads(1);
 }
@@ -1114,6 +1129,11 @@ int main(void) {
 
   // Base64 helpers
   test_base64();
+
+  // Stacktrace helpers
+  test_write_buffer_to_stderr();
+  test_get_current_backtrace();
+  test_print_stacktrace();
 
   // OpenMP helpers
   test_set_num_omp_threads();
