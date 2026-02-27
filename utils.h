@@ -202,6 +202,8 @@ void remove_str_punctuation(char* str);
 // Trim whitespace from string in-place
 void trim_whitespace(char* str);
 
+const char* skip_whitespace(const char* s);
+
 void set_array_to_zero(void* array, uint num_bytes);
 
 #define DIE_IF_ERROR(thing)                             \

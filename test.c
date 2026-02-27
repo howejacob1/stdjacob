@@ -142,6 +142,23 @@ static void test_trim_whitespace(void) {
   assert(streq(buf3, ""));
 }
 
+static void test_skip_whitespace(void) {
+  const char* s1 = "  \t\n\r hello";
+  assert(skip_whitespace(s1) == s1 + 6);
+  assert(streq(skip_whitespace(s1), "hello"));
+
+  const char* s2 = "x";
+  assert(skip_whitespace(s2) == s2);
+  assert(streq(skip_whitespace(s2), "x"));
+
+  const char* s3 = "";
+  assert(skip_whitespace(s3) == s3);
+  assert(*skip_whitespace(s3) == '\0');
+
+  const char* s4 = "   ";
+  assert(*skip_whitespace(s4) == '\0');
+}
+
 static void test_strsize(void) {
   assert(strsize("hello") == 6);
   assert(strsize("") == 1);
@@ -1047,6 +1064,7 @@ int main(void) {
   test_str_to_upper();
   test_remove_str_punctuation();
   test_trim_whitespace();
+  test_skip_whitespace();
   test_strsize();
   test_total_str_array_size();
   test_required_size_to_interpose_strings_with();

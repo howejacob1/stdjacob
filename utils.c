@@ -168,7 +168,7 @@ void trim_whitespace(char* str) {
   char cur;
   do {
     cur = str[src_index];    
-    if (!isspace(cur)) {
+    if (!isspace((unsigned char)cur)) {
       if (dest_index != src_index) {
         str[dest_index] = str[src_index];
       }
@@ -176,6 +176,11 @@ void trim_whitespace(char* str) {
     }
     src_index++;
   } while (cur);
+}
+
+const char* skip_whitespace(const char* s) {
+  while (*s && isspace((unsigned char)*s)) s++;
+  return s;
 }
 
 void set_array_to_zero(void* array, uint num_bytes) {
