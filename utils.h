@@ -480,10 +480,16 @@ bool filename_sha256(const char *path, char *out_hex);
 // OpenMP helpers
 void set_num_omp_threads(uint n);
 
+#define BYTES_PER_KB (1024L)
 #define BYTES_PER_MB (1024L * 1024L)
+#define BYTES_PER_GB (1024L * 1024L * 1024L)
+#define KB_TO_BYTES(n) ((size_t)(n) * BYTES_PER_KB)
+#define MB_TO_BYTES(n) ((size_t)(n) * BYTES_PER_MB)
+#define GB_TO_BYTES(n) ((size_t)(n) * BYTES_PER_GB)
 
 #if defined(__linux__)
 size_t get_current_ram_usage_bytes(void);
+size_t get_total_system_ram_bytes(void);
 #endif
 
 #ifdef __cplusplus

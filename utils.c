@@ -7,6 +7,7 @@
 #include <libgen.h>
 #include <signal.h>
 #include <sys/stat.h>
+#include <sys/sysinfo.h>
 #include <sys/resource.h>
 #include <dirent.h>
 
@@ -1110,6 +1111,12 @@ size_t get_current_ram_usage_bytes(void) {
     fclose(f);
   }
   return (size_t)rss * (size_t)sysconf(_SC_PAGESIZE);
+}
+
+size_t get_total_system_ram_bytes(void) {
+  struct sysinfo si;
+  sysinfo(&si);
+  return (size_t)si.totalram * (size_t)si.mem_unit;
 }
 #endif
 

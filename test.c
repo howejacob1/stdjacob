@@ -1075,6 +1075,21 @@ static void test_filename_sha256(void) {
   unlink(tmppath);
 }
 
+#if defined(__linux__)
+static void test_get_total_system_ram_bytes(void) {
+  size_t total = get_total_system_ram_bytes();
+  assert(total > GB_TO_BYTES(1));
+  printf("  get_total_system_ram_bytes() = %zu (%zu GB)\n", total, total / BYTES_PER_GB);
+}
+#endif
+
+static void test_byte_macros(void) {
+  assert(KB_TO_BYTES(1) == 1024);
+  assert(MB_TO_BYTES(1) == 1024 * 1024);
+  assert(GB_TO_BYTES(1) == 1024L * 1024L * 1024L);
+  assert(GB_TO_BYTES(50) == 50L * 1024L * 1024L * 1024L);
+}
+
 int main(void) {
   init_random();
 
@@ -1202,8 +1217,9 @@ int main(void) {
   test_filename_sha256();
 
 #if defined(__linux__)
-  // RAM usage
   test_get_current_ram_usage_bytes();
+  test_get_total_system_ram_bytes();
+  test_byte_macros();
 #endif
 
   printf("All tests passed!\n");
