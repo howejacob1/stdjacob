@@ -389,7 +389,7 @@ void close_compressed(FILE* f);
 #define EXT_RIFF  "riff"
 
 // Media file detection
-bool is_pathname_media(const char* pathname);
+bool is_filename_media(const char* filename);
 
 // Executable path utilities
 void where_is_exe(char* buffer, size_t max_len);

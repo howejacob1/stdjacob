@@ -766,12 +766,11 @@ static const char* media_extensions[] = {
   EXT_AIFF, EXT_AIF, EXT_RIFF
 };
 
-bool is_pathname_media(const char* pathname) {
-  if (!pathname) return false;
+bool is_filename_media(const char* filename) {
+  if (!filename) return false;
   
-  // Find last dot in pathname
-  const char* dot_and_ext = strrchr(pathname, '.'); // a.b.c returns dot = ".c" 
-  bool was_dot_found = (dot_and_ext != NULL) && (dot_and_ext != pathname);
+  const char* dot_and_ext = strrchr(filename, '.');
+  bool was_dot_found = (dot_and_ext != NULL) && (dot_and_ext != filename);
   if (!was_dot_found) return false;
   
   const char* ext = dot_and_ext + 1;

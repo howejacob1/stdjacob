@@ -829,20 +829,20 @@ static void test_compression_detection(void) {
   assert(!is_compressed("file.txt"));
 }
 
-static void test_is_pathname_media(void) {
-  assert(is_pathname_media("song.mp3"));
-  assert(is_pathname_media("video.mp4"));
-  assert(is_pathname_media("audio.wav"));
-  assert(is_pathname_media("audio.flac"));
-  assert(is_pathname_media("audio.ogg"));
-  assert(is_pathname_media("audio.opus"));
-  assert(is_pathname_media("video.webm"));
-  assert(is_pathname_media("video.mkv"));
-  assert(is_pathname_media("video.avi"));
-  assert(is_pathname_media("video.mov"));
-  assert(is_pathname_media("/path/to/AUDIO.WAV"));  // case insensitive
-  assert(!is_pathname_media("document.txt"));
-  assert(!is_pathname_media("image.png"));
+static void test_is_filename_media(void) {
+  assert(is_filename_media("song.mp3"));
+  assert(is_filename_media("video.mp4"));
+  assert(is_filename_media("audio.wav"));
+  assert(is_filename_media("audio.flac"));
+  assert(is_filename_media("audio.ogg"));
+  assert(is_filename_media("audio.opus"));
+  assert(is_filename_media("video.webm"));
+  assert(is_filename_media("video.mkv"));
+  assert(is_filename_media("video.avi"));
+  assert(is_filename_media("video.mov"));
+  assert(is_filename_media("/path/to/AUDIO.WAV"));
+  assert(!is_filename_media("document.txt"));
+  assert(!is_filename_media("image.png"));
 }
 
 // ============================================================================
@@ -1140,7 +1140,7 @@ int main(void) {
 
   // File extension helpers
   test_compression_detection();
-  test_is_pathname_media();
+  test_is_filename_media();
 
   // Constants
   test_constants();
