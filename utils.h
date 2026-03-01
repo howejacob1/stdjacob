@@ -487,6 +487,10 @@ void set_num_omp_threads(uint n);
 #define MB_TO_BYTES(n) ((size_t)(n) * BYTES_PER_MB)
 #define GB_TO_BYTES(n) ((size_t)(n) * BYTES_PER_GB)
 
+const char *env_str(const char *key, const char *fallback);
+int env_int(const char *key, int fallback);
+size_t env_size(const char *key, size_t fallback);
+
 #if defined(__linux__)
 size_t get_current_ram_usage_bytes(void);
 size_t get_total_system_ram_bytes(void);

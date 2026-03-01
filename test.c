@@ -1083,6 +1083,23 @@ static void test_get_total_system_ram_bytes(void) {
 }
 #endif
 
+static void test_env_helpers(void) {
+  setenv("STDJACOB_TEST_STR", "hello", 1);
+  setenv("STDJACOB_TEST_INT", "42", 1);
+  setenv("STDJACOB_TEST_SIZE", "1073741824", 1);
+
+  assert(streq(env_str("STDJACOB_TEST_STR", "default"), "hello"));
+  assert(streq(env_str("STDJACOB_TEST_NONEXISTENT", "default"), "default"));
+  assert(env_int("STDJACOB_TEST_INT", 0) == 42);
+  assert(env_int("STDJACOB_TEST_NONEXISTENT", 99) == 99);
+  assert(env_size("STDJACOB_TEST_SIZE", 0) == GB_TO_BYTES(1));
+  assert(env_size("STDJACOB_TEST_NONEXISTENT", 50) == 50);
+
+  unsetenv("STDJACOB_TEST_STR");
+  unsetenv("STDJACOB_TEST_INT");
+  unsetenv("STDJACOB_TEST_SIZE");
+}
+
 static void test_byte_macros(void) {
   assert(KB_TO_BYTES(1) == 1024);
   assert(MB_TO_BYTES(1) == 1024 * 1024);
@@ -1215,6 +1232,9 @@ int main(void) {
   // Cryptographic hashing
   test_filename_md5();
   test_filename_sha256();
+
+  // Environment variable helpers
+  test_env_helpers();
 
 #if defined(__linux__)
   test_get_current_ram_usage_bytes();

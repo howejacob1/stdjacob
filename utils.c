@@ -1182,3 +1182,20 @@ bool file_sha256(FILE *f, char *out_hex) {
 bool filename_sha256(const char *path, char *out_hex) {
     return filename_digest(path, EVP_sha256(), out_hex);
 }
+
+/* === Environment variable helpers === */
+
+const char *env_str(const char *key, const char *fallback) {
+    const char *val = getenv(key);
+    return val ? val : fallback;
+}
+
+int env_int(const char *key, int fallback) {
+    const char *val = getenv(key);
+    return val ? atoi(val) : fallback;
+}
+
+size_t env_size(const char *key, size_t fallback) {
+    const char *val = getenv(key);
+    return val ? (size_t)atoll(val) : fallback;
+}
