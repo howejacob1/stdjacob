@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #define _XOPEN_SOURCE 500
 #include "utils.h"
+#include <openssl/evp.h>
 #include <pwd.h>
 #include <stdarg.h>
 #include <libgen.h>
@@ -1130,4 +1131,47 @@ void set_num_omp_threads(uint n) {
         setenv("OMP_NUM_THREADS", buf, 1);
     #endif
 #endif
+}
+
+/* === Cryptographic hashing === */
+
+static bool file_digest(FILE *f, const EVP_MD *md, char *out_hex) {
+    EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+    EVP_DigestInit_ex(ctx, md, NULL);
+    unsigned char buf[8192];
+    size_t n;
+    while ((n = fread(buf, 1, sizeof(buf), f)) > 0)
+        EVP_DigestUpdate(ctx, buf, n);
+    unsigned char digest[EVP_MAX_MD_SIZE];
+    unsigned int digest_len;
+    EVP_DigestFinal_ex(ctx, digest, &digest_len);
+    EVP_MD_CTX_free(ctx);
+    for (unsigned int i = 0; i < digest_len; i++)
+        sprintf(out_hex + i * 2, "%02x", digest[i]);
+    out_hex[digest_len * 2] = '\0';
+    return true;
+}
+
+static bool filename_digest(const char *path, const EVP_MD *md, char *out_hex) {
+    FILE *f = fopen(path, "rb");
+    if (!f) { out_hex[0] = '\0'; return false; }
+    bool ok = file_digest(f, md, out_hex);
+    fclose(f);
+    return ok;
+}
+
+bool file_md5(FILE *f, char *out_hex) {
+    return file_digest(f, EVP_md5(), out_hex);
+}
+
+bool filename_md5(const char *path, char *out_hex) {
+    return filename_digest(path, EVP_md5(), out_hex);
+}
+
+bool file_sha256(FILE *f, char *out_hex) {
+    return file_digest(f, EVP_sha256(), out_hex);
+}
+
+bool filename_sha256(const char *path, char *out_hex) {
+    return filename_digest(path, EVP_sha256(), out_hex);
 }

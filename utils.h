@@ -469,6 +469,14 @@ void write_buffer_to_stderr(const char* buf, size_t len);
 int get_current_backtrace(void** buffer, int buffer_size);
 void print_stacktrace(void);
 
+// Cryptographic hashing (requires libcrypto / openssl)
+#define MD5_HEX_LEN 33
+#define SHA256_HEX_LEN 65
+bool file_md5(FILE *f, char *out_hex);
+bool filename_md5(const char *path, char *out_hex);
+bool file_sha256(FILE *f, char *out_hex);
+bool filename_sha256(const char *path, char *out_hex);
+
 // OpenMP helpers
 void set_num_omp_threads(uint n);
 

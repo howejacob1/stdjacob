@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200809L
 #include "stdjacob.h"
 #include "base64.h"
 #include <math.h>
@@ -1045,6 +1045,36 @@ static void test_get_current_ram_usage_bytes(void) {
 }
 #endif
 
+static void test_filename_md5(void) {
+  char tmppath[] = "/tmp/stdjacob_test_md5_XXXXXX";
+  int fd = mkstemp(tmppath);
+  assert(fd >= 0);
+  write(fd, "hello world", 11);
+  close(fd);
+
+  char hex[MD5_HEX_LEN];
+  assert(filename_md5(tmppath, hex));
+  assert(streq(hex, "5eb63bbbe01eeed093cb22bb8f5acdc3"));
+
+  assert(!filename_md5("/nonexistent/file", hex));
+  unlink(tmppath);
+}
+
+static void test_filename_sha256(void) {
+  char tmppath[] = "/tmp/stdjacob_test_sha256_XXXXXX";
+  int fd = mkstemp(tmppath);
+  assert(fd >= 0);
+  write(fd, "hello world", 11);
+  close(fd);
+
+  char hex[SHA256_HEX_LEN];
+  assert(filename_sha256(tmppath, hex));
+  assert(streq(hex, "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"));
+
+  assert(!filename_sha256("/nonexistent/file", hex));
+  unlink(tmppath);
+}
+
 int main(void) {
   init_random();
 
@@ -1166,6 +1196,10 @@ int main(void) {
 
   // OpenMP helpers
   test_set_num_omp_threads();
+
+  // Cryptographic hashing
+  test_filename_md5();
+  test_filename_sha256();
 
 #if defined(__linux__)
   // RAM usage

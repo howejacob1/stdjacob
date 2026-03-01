@@ -19,7 +19,7 @@ $(LIB): $(OBJS)
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 $(TEST_ELF): test.c $(LIB)
-	$(CC) $(CFLAGS) $< -L. -lstdjacob -o $@ -lm
+	$(CC) $(CFLAGS) $< -L. -lstdjacob -o $@ -lm -lcrypto
 
 clean:
 	rm -f $(OBJS) $(LIB) $(TEST_ELF) *.d
