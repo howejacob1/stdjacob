@@ -1107,6 +1107,24 @@ static void test_byte_macros(void) {
   assert(GB_TO_BYTES(50) == 50L * 1024L * 1024L * 1024L);
 }
 
+static void test_calculate_wer(void) {
+  float w1 = calculate_wer("hello world", "hello world");
+  assert(w1 < 0.001f);
+  float w2 = calculate_wer("hello earth", "hello world");
+  assert(w2 > 0.4f && w2 < 0.6f);
+  float w3 = calculate_wer("completely different words here", "hello world");
+  assert(w3 > 0.5f);
+  float w4 = calculate_wer("Hello, World!", "hello world");
+  assert(w4 < 0.001f);
+  float w5 = calculate_wer("", "hello");
+  assert(w5 > 0.9f);
+  float w6 = calculate_wer("hello", "");
+  assert(w6 > 0.9f);
+  double d1 = wer("hello world", "hello world");
+  assert(d1 < 0.001);
+  printf("  calculate_wer... OK\n");
+}
+
 int main(void) {
   init_random();
 
@@ -1241,6 +1259,8 @@ int main(void) {
   test_get_total_system_ram_bytes();
   test_byte_macros();
 #endif
+
+  test_calculate_wer();
 
   printf("All tests passed!\n");
   return 0;

@@ -102,3 +102,7 @@ double wer(const char* str_to_analyze, const char* what_str_should_be) {
     #undef D
     return result;
 }
+
+float calculate_wer(const char* str_to_analyze, const char* what_str_should_be) {
+    return (float)wer(str_to_analyze, what_str_should_be);
+}
