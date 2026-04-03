@@ -129,33 +129,26 @@ float clamp_float(float val, float min, float max);
 #define SEM_THREAD_LOCAL   0
 #define SEM_PROCESS_SHARED 1
 
-// Semaphore helpers (POSIX only)
-#if !IS_WINDOWS()
+// Semaphore and socket helpers require POSIX, skip on embedded/Arduino
+#if !IS_WINDOWS() && !defined(ARDUINO)
 #include <semaphore.h>
 void create_sem_thread_local(sem_t* sem);
 void create_sem_process_shared(sem_t* sem);
-#endif // UTILS_H
 
-// Port number validation (TCP/UDP ports are 16-bit: 1-65535)
-#define MAX_PORT_NUMBER 65535
-#define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
-typedef uint16_t port_t;
-bool str_to_port(const char* str, port_t* out);
-
-// Socket types and utilities
-#if !IS_WINDOWS()
 #include <sys/socket.h>
 #include <netinet/in.h>
-#endif
 typedef int socket_t;
 typedef struct sockaddr_in sockaddr_t;
 #define INVALID_SOCKET_VALUE (-1)
 
-// Extract port from sockaddr_t (replaces ntohs(addr.sin_port))
+#define MAX_PORT_NUMBER 65535
+#define is_valid_port(port) ((port) > 0 && (port) <= MAX_PORT_NUMBER)
+typedef uint16_t port_t;
+bool str_to_port(const char* str, port_t* out);
 port_t sockaddr_to_port(const sockaddr_t* addr);
-
 port_t open_socket_on_some_port(socket_t* sock_out);
 port_t open_some_socket_on_some_port(void);
+#endif
 
 #define FORTO(var, to) for (uint var = 0; var < to; var++)
 
@@ -234,7 +227,7 @@ bool is_stdin_closed(void);
 #define YN_BUFFER_SIZE 255
 bool ask_yn(const char* message, const char* error_message, bool default_is_yes);
 
-bool is_str_in_list(const char* str, const char* str_list[], uint num_strs);
+bool is_str_in_array(const char* str, const char* str_array[], uint num_strs);
 
 #define SORT_CODE_LESSER -1
 #define SORT_CODE_EQUAL 0

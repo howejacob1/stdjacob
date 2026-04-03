@@ -258,6 +258,16 @@ static void test_is_dir_dots(void) {
   assert(!is_dir_dots("file"));
 }
 
+static void test_is_str_in_array(void) {
+  const char* fruits[] = {"apple", "banana", "cherry"};
+  assert(is_str_in_array("banana", fruits, 3));
+  assert(is_str_in_array("apple", fruits, 3));
+  assert(is_str_in_array("cherry", fruits, 3));
+  assert(!is_str_in_array("grape", fruits, 3));
+  assert(!is_str_in_array("", fruits, 3));
+  assert(!is_str_in_array("banana", fruits, 0));
+}
+
 // ============================================================================
 // Math helpers
 // ============================================================================
@@ -1155,6 +1165,7 @@ int main(void) {
   test_ends_with();
   test_ends_with_char();
   test_is_dir_dots();
+  test_is_str_in_array();
 
   // Math helpers
   test_is_divisible_by();

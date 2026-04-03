@@ -219,11 +219,11 @@ bool ask_yn(const char* message, const char* error_message, bool default_is_yes)
   return false; // for compiler warning
 }
 
-bool is_str_in_list(const char* str, const char* str_list[],
-                    const uint num_strs) {
+bool is_str_in_array(const char* str, const char* str_array[],
+                     const uint num_strs) {
   const char* cur_str;
   FORTO(index, num_strs) {
-    cur_str = str_list[index];
+    cur_str = str_array[index];
     if (streq(cur_str, str)) {
       return true;
     }
